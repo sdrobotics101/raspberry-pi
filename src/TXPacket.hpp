@@ -1,0 +1,16 @@
+#ifndef TXPacket_hpp
+#define TXPacket_hpp
+
+#include <cstdint>
+
+class TXPacket
+{
+public:
+private:
+	typedef struct
+	{
+		uint8_t test;
+	}__attribute__((__packed__)) tx_packet_t;
+};
+
+#endif /* TXPacket_hpp */
