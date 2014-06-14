@@ -1,7 +1,7 @@
 #ifndef RXPacket_hpp
 #define RXPacket_hpp
 
-#include <cstdint>
+#include <stdint.h>
 
 class RXPacket
 {

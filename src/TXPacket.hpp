@@ -1,7 +1,7 @@
 #ifndef TXPacket_hpp
 #define TXPacket_hpp
 
-#include <cstdint>
+#include <stdint.h>
 
 class TXPacket
 {

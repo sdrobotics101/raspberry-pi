@@ -8,8 +8,11 @@ class Serial
 {
 public:
 	Serial();
+	~Serial();
+	void open();
 	void start();
 private:
+	int uart0_filestream;
 	TXPacket tx_packet;
 	RXPacket rx_packet;
 };

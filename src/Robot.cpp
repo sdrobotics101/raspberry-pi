@@ -1,7 +1,8 @@
-#include <cstdlib>
+#include <stdlib.h>
 
 #include "Robot.hpp"
 
-void Robot::start()
+int Robot::start()
 {
+	return EXIT_SUCCESS;
 }
