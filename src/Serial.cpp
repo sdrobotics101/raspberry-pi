@@ -4,25 +4,25 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <iostream>
-
 #include "Serial.hpp"
 
 Serial::Serial()
 {
+	is_running = false;
 	uart0_filestream = -1;
 }
 
 Serial::~Serial()
 {
-	close(uart0_filestream);
+	stop();
 }
 
-void Serial::open()
+void Serial::open_serial()
 {
 	uart0_filestream = open("/dev/ttyAMA0", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (uart0_filestream == -1)
 	{
-		std::cerr << "Unable to open UART stream on /dev/ttyAMA0" << std::endl;
+		std::cerr << "Unable to open UART stream on /dev/ttyAMA0." << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	struct termios options;
@@ -36,5 +36,41 @@ void Serial::open()
 }
 
 void Serial::start()
+{
+	serial_thread = new std::thread(&Serial::run_thread, this);
+}
+
+void Serial::stop()
+{
+	is_running = false;
+	serial_thread->join();
+	close(uart0_filestream);
+}
+
+TXPacket* Serial::get_tx_packet()
+{
+	return &tx_packet;
+}
+
+RXPacket* Serial::get_rx_packet()
+{
+	return &rx_packet;
+}
+
+void Serial::run_thread()
+{
+	is_running = true;
+	while (is_running)
+	{
+		receive_packet();
+		transmit_packet();
+	}
+}
+
+void Serial::receive_packet()
+{
+}
+
+void Serial::transmit_packet()
 {
 }
