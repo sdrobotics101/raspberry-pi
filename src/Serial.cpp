@@ -14,15 +14,17 @@ Serial::Serial()
 
 Serial::~Serial()
 {
-	stop();
+	if (is_running)
+		stop();
 }
 
-void Serial::open_serial()
+void
+ Serial::open_serial()
 {
 	uart0_filestream = open("/dev/ttyAMA0", O_RDWR | O_NOCTTY | O_NDELAY);
-	if (uart0_filestream == -1)
-	{
-		std::cerr << "Unable to open UART stream on /dev/ttyAMA0." << std::endl;
+	if (uart0_filestream == -1) {
+		std::cerr << "Unable to open UART stream on /dev/ttyAMA0." <<
+		    std::endl;
 		exit(EXIT_FAILURE);
 	}
 	struct termios options;
@@ -47,12 +49,12 @@ void Serial::stop()
 	close(uart0_filestream);
 }
 
-TXPacket* Serial::get_tx_packet()
+TXPacket *Serial::get_tx_packet()
 {
 	return &tx_packet;
 }
 
-RXPacket* Serial::get_rx_packet()
+RXPacket *Serial::get_rx_packet()
 {
 	return &rx_packet;
 }
@@ -60,15 +62,15 @@ RXPacket* Serial::get_rx_packet()
 void Serial::run_thread()
 {
 	is_running = true;
-	while (is_running)
-	{
-		receive_packet();
-		transmit_packet();
+	while (is_running) {
+		if (receive_packet())
+			transmit_packet();
 	}
 }
 
-void Serial::receive_packet()
+bool Serial::receive_packet()
 {
+	return true;
 }
 
 void Serial::transmit_packet()

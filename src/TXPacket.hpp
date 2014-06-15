@@ -4,9 +4,8 @@
 #include <stdint.h>
 #include <mutex>
 
-class TXPacket
-{
-public:
+class TXPacket {
+ public:
 	TXPacket();
 	void set_vel_x(int8_t vel_x);
 	int8_t get_vel_x();
@@ -27,11 +26,10 @@ public:
 	void set_servo_ctl(int8_t servo_ctl[]);
 	void get_servo_ctl(int8_t servo_ctl[]);
 	size_t size();
-//	void read_buffer(char buffer[]);
-//	void get_buffer(char buffer[]);
-private:
-	typedef struct
-	{
+//      void read_buffer(char buffer[]);
+//      void get_buffer(char buffer[]);
+ private:
+	typedef struct {
 		int16_t header;
 		int8_t vel_x;
 		int8_t vel_y;
@@ -44,10 +42,10 @@ private:
 		int8_t servo_ctl[6];
 		int8_t spare;
 		int16_t checksum;
-	}__attribute__((__packed__)) tx_packet_t;
+	} __attribute__ ((__packed__)) tx_packet_t;
 	tx_packet_t tx_packet;
-	std::mutex tx_packet_mtx;
+	 std::mutex tx_packet_mtx;
 	size_t tx_packet_size;
 };
 
-#endif /* TXPacket_hpp */
+#endif				// TXPacket_hpp

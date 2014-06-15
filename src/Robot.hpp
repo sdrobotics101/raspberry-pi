@@ -3,12 +3,11 @@
 
 #include "Serial.hpp"
 
-class Robot
-{
-public:
+class Robot {
+ public:
 	int start();
-private:
-	Serial serial;
+ private:
+	 Serial serial;
 };
 
-#endif /* Robot_hpp */
+#endif				// Robot_hpp
