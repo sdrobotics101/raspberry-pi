@@ -17,6 +17,7 @@ RXPacket::RXPacket()
 	rx_packet.spare = 0;
 	rx_packet.checksum = compute_checksum();
 	rx_packet_size = sizeof(rx_packet_t);
+	is_valid = false;
 }
 
 void RXPacket::set_acc_x(int8_t acc_x)
@@ -108,6 +109,11 @@ size_t RXPacket::size()
 	return rx_packet_size;
 }
 
+bool RXPacket::valid()
+{
+	return is_valid;
+}
+
 bool RXPacket::read_buffer(unsigned char buffer[])
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
@@ -115,8 +121,10 @@ bool RXPacket::read_buffer(unsigned char buffer[])
 	memcpy(&rx_packet, buffer, rx_packet_size);
 	if (rx_packet.checksum != compute_checksum()) {
 		rx_packet = old_rx_packet;
+		is_valid = false;
 		return false;
 	}
+	is_valid = true;
 	return true;
 }
 

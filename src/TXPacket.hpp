@@ -26,6 +26,7 @@ class TXPacket {
 	void set_servo_ctl(int8_t servo_ctl[]);
 	void get_servo_ctl(int8_t servo_ctl[]);
 	size_t size();
+	bool valid();
 	bool read_buffer(unsigned char buffer[]);
 	void get_buffer(unsigned char buffer[]);
  private:
@@ -48,6 +49,7 @@ class TXPacket {
 	tx_packet_t tx_packet;
 	 std::mutex tx_packet_mtx;
 	size_t tx_packet_size;
+	bool is_valid;
 };
 
 #endif				// TXPacket_hpp

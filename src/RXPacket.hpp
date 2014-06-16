@@ -22,6 +22,7 @@ class RXPacket {
 	void set_depth(int8_t depth);
 	int8_t get_depth();
 	size_t size();
+	bool valid();
 	bool read_buffer(unsigned char buffer[]);
 	void get_buffer(unsigned char buffer[]);
  private:
@@ -41,6 +42,7 @@ class RXPacket {
 	rx_packet_t rx_packet;
 	 std::mutex rx_packet_mtx;
 	size_t rx_packet_size;
+	bool is_valid;
 };
 
 #endif				// RXPacket_hpp

@@ -19,6 +19,7 @@ TXPacket::TXPacket()
 	tx_packet.spare = 0;
 	tx_packet.checksum = compute_checksum();
 	tx_packet_size = sizeof(tx_packet_t);
+	is_valid = false;
 }
 
 void TXPacket::set_vel_x(int8_t vel_x)
@@ -134,6 +135,11 @@ size_t TXPacket::size()
 	return tx_packet_size;
 }
 
+bool TXPacket::valid()
+{
+	return is_valid;
+}
+
 bool TXPacket::read_buffer(unsigned char buffer[])
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
@@ -141,8 +147,10 @@ bool TXPacket::read_buffer(unsigned char buffer[])
 	memcpy(&tx_packet, buffer, tx_packet_size);
 	if (tx_packet.checksum != compute_checksum()) {
 		tx_packet = old_tx_packet;
+		is_valid = false;
 		return false;
 	}
+	is_valid = true;
 	return true;
 }
 
