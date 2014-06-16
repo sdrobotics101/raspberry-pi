@@ -5,6 +5,17 @@
 
 RXPacket::RXPacket()
 {
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet.header = 0;
+	rx_packet.acc_x = 0;
+	rx_packet.acc_y = 0;
+	rx_packet.acc_z = 0;
+	rx_packet.mag_x = 0;
+	rx_packet.mag_y = 0;
+	rx_packet.mag_z = 0;
+	rx_packet.depth = 0;
+	rx_packet.spare = 0;
+	rx_packet.checksum = compute_checksum();
 	rx_packet_size = sizeof(rx_packet_t);
 }
 
@@ -97,14 +108,37 @@ size_t RXPacket::size()
 	return rx_packet_size;
 }
 
-void RXPacket::read_buffer(unsigned char buffer[])
+bool RXPacket::read_buffer(unsigned char buffer[])
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet_t old_rx_packet = rx_packet;
 	memcpy(&rx_packet, buffer, rx_packet_size);
+	if (rx_packet.checksum != compute_checksum()) {
+		rx_packet = old_rx_packet;
+		return false;
+	}
+	return true;
 }
 
 void RXPacket::get_buffer(unsigned char buffer[])
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet.checksum = compute_checksum();
 	memcpy(buffer, &rx_packet, rx_packet_size);
+}
+
+int16_t RXPacket::compute_checksum()
+{
+	int32_t checksum32 = 0;
+	checksum32 += rx_packet.header;
+	checksum32 += rx_packet.acc_x;
+	checksum32 += rx_packet.acc_y;
+	checksum32 += rx_packet.acc_z;
+	checksum32 += rx_packet.mag_x;
+	checksum32 += rx_packet.mag_y;
+	checksum32 += rx_packet.mag_z;
+	checksum32 += rx_packet.depth;
+	checksum32 += rx_packet.spare;
+	int16_t checksum16 = checksum32;
+	return checksum16;
 }

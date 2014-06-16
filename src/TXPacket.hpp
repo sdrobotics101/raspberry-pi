@@ -26,9 +26,10 @@ class TXPacket {
 	void set_servo_ctl(int8_t servo_ctl[]);
 	void get_servo_ctl(int8_t servo_ctl[]);
 	size_t size();
-//      void read_buffer(char buffer[]);
-//      void get_buffer(char buffer[]);
+	bool read_buffer(unsigned char buffer[]);
+	void get_buffer(unsigned char buffer[]);
  private:
+	 int16_t compute_checksum();
 	typedef struct {
 		int16_t header;
 		int8_t vel_x;
@@ -43,6 +44,7 @@ class TXPacket {
 		int8_t spare;
 		int16_t checksum;
 	} __attribute__ ((__packed__)) tx_packet_t;
+	const int servo_ctl_length = 6;
 	tx_packet_t tx_packet;
 	 std::mutex tx_packet_mtx;
 	size_t tx_packet_size;

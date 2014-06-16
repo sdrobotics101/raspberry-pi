@@ -22,9 +22,10 @@ class RXPacket {
 	void set_depth(int8_t depth);
 	int8_t get_depth();
 	size_t size();
-	void read_buffer(unsigned char buffer[]);
+	bool read_buffer(unsigned char buffer[]);
 	void get_buffer(unsigned char buffer[]);
  private:
+	 int16_t compute_checksum();
 	typedef struct {
 		int16_t header;
 		int8_t acc_x;
