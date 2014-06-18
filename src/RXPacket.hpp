@@ -7,6 +7,7 @@
 class RXPacket {
  public:
 	RXPacket();
+	int16_t get_header();
 	void set_acc_x(int8_t acc_x);
 	int8_t get_acc_x();
 	void set_acc_y(int8_t acc_y);

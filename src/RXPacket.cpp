@@ -2,11 +2,11 @@
 #include <mutex>
 #include <string.h>
 #include "RXPacket.hpp"
-
+#include <iostream>
 RXPacket::RXPacket()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	rx_packet.header = 0;
+	rx_packet.header = 0x1d3b;
 	rx_packet.acc_x = 0;
 	rx_packet.acc_y = 0;
 	rx_packet.acc_z = 0;
@@ -18,6 +18,14 @@ RXPacket::RXPacket()
 	rx_packet.checksum = compute_checksum();
 	rx_packet_size = sizeof(rx_packet_t);
 	is_valid = false;
+	std::cout << (int8_t) (get_header() >> 8) << std::endl;
+	std::cout << (int8_t) get_header() << std::endl;
+}
+
+int16_t RXPacket::get_header()
+{
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	return rx_packet.header;
 }
 
 void RXPacket::set_acc_x(int8_t acc_x)
