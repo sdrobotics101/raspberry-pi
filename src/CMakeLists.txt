@@ -1,1 +1,3 @@
-add_executable(robosub_rpi robosub_rpi.cpp Robot.cpp RXPacket.cpp Serial.cpp TXPacket.cpp)
+find_package(OpenCV REQUIRED)
+add_executable(robosub_rpi HSVImage.cpp robosub_rpi.cpp Robot.cpp RXPacket.cpp Serial.cpp TXPacket.cpp VideoDevice.cpp)
+target_link_libraries(robosub_rpi ${OpenCV_LIBS})

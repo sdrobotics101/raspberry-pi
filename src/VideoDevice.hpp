@@ -1,6 +1,6 @@
-/* Serial.hpp -- Header file for Serial class
+/* VideoDevice.hpp -- Header file for VideoDevice class
 
-   Copyright (C) 2014 Tushar Pankaj
+   Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
    This file is part of San Diego Robotics 101 Robosub.
    
@@ -18,31 +18,26 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef Serial_hpp
-#define Serial_hpp
+#ifndef VideoDevice_hpp
+#define VideoDevice_hpp
 
 #include <thread>
-#include "TXPacket.hpp"
-#include "RXPacket.hpp"
+#include <opencv2/opencv.hpp>
 
-class Serial {
+class VideoDevice {
  public:
-	Serial();
-	~Serial();
-	void open_serial();
-	void start();
-	void stop();
-	TXPacket *get_tx_packet();
-	RXPacket *get_rx_packet();
+	VideoDevice();
+	void start_capture(int device_id);
+	 cv::Mat get_image();
+	~VideoDevice();
  private:
-	void run_thread();
-	bool receive_packet();
-	void transmit_packet();
-	int uart0_filestream;
-	TXPacket tx_packet;
-	RXPacket rx_packet;
-	bool is_running;
-	 std::thread * serial_thread;
+	void init_camera(int device_id);
+	void capture_from_camera();
+	 std::thread * capture_thread;
+	 cv::VideoCapture camera;
+	 cv::Mat image;
+	bool is_finished;
+	bool is_ready;
 };
 
-#endif				// Serial_hpp
+#endif				// VideoDevice_hpp

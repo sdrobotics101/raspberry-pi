@@ -1,6 +1,6 @@
-/* Serial.hpp -- Header file for Serial class
+/* HSVImage.hpp -- Header file for HSVImage class
 
-   Copyright (C) 2014 Tushar Pankaj
+   Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
    This file is part of San Diego Robotics 101 Robosub.
    
@@ -18,31 +18,26 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef Serial_hpp
-#define Serial_hpp
+#ifndef HSVImage_hpp
+#define HSVImage_hpp
 
-#include <thread>
-#include "TXPacket.hpp"
-#include "RXPacket.hpp"
+#include <opencv2/opencv.hpp>
 
-class Serial {
+class HSVImage {
  public:
-	Serial();
-	~Serial();
-	void open_serial();
-	void start();
-	void stop();
-	TXPacket *get_tx_packet();
-	RXPacket *get_rx_packet();
+	HSVImage(cv::Mat & rgb_img);
+	void load_rgb_image(cv::Mat & rgb_img);
+	 cv::Mat * get_rgb_mat();
+	 cv::Mat * get_hsv_mat();
+	 cv::Mat * get_hue_mat();
+	 cv::Mat * get_saturation_mat();
+	 cv::Mat * get_value_mat();
  private:
-	void run_thread();
-	bool receive_packet();
-	void transmit_packet();
-	int uart0_filestream;
-	TXPacket tx_packet;
-	RXPacket rx_packet;
-	bool is_running;
-	 std::thread * serial_thread;
+	 cv::Mat rgb;
+	 cv::Mat hsv;
+	 cv::Mat hue;
+	 cv::Mat saturation;
+	 cv::Mat value;
 };
 
-#endif				// Serial_hpp
+#endif				// HSVImage_hpp
