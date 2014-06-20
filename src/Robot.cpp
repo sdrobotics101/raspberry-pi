@@ -24,5 +24,6 @@
 int Robot::start()
 {
 	serial.open_serial();
+	serial.start();
 	return EXIT_SUCCESS;
 }

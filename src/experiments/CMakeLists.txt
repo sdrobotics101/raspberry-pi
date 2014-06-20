@@ -1,0 +1,5 @@
+find_package(OpenCV REQUIRED)
+add_executable(blob_detect blob_detect.cpp)
+target_link_libraries(blob_detect ${OpenCV_LIBS})
+add_executable(neural_network neural_network.cpp)
+target_link_libraries(neural_network ${OpenCV_LIBS})
