@@ -47,8 +47,7 @@ void VideoDevice::init_camera(int device_id)
 {
 	camera.open(device_id);
 	if (!camera.isOpened()) {
-		std::
-		    cerr << "Unable to open capture device /dev/video" <<
+		std::cerr << "Unable to open capture device /dev/video" <<
 		    device_id << std::endl;
 		exit(EXIT_FAILURE);
 	}

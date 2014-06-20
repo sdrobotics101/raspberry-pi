@@ -3,11 +3,12 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-	if (argc != 3)
-	{
-		std::cerr << "Usage: " << argv[0] << " [INPUT FILE] [OUTPUT FILE]" << std::endl;
+	if (argc != 3) {
+		std::
+		    cerr << "Usage: " << argv[0] <<
+		    " [INPUT FILE] [OUTPUT FILE]" << std::endl;
 		return EXIT_FAILURE;
 	}
 	cv::Mat input = cv::imread(argv[1]);
@@ -22,14 +23,13 @@ int main(int argc, char* argv[])
 	params.maxArea = 500.0f;
 	cv::SimpleBlobDetector blob_detector = cv::SimpleBlobDetector(params);
 	blob_detector.create("SimpleBlob");
-	std::vector <cv::KeyPoint> keypoints;
+	std::vector < cv::KeyPoint > keypoints;
 	blob_detector.detect(input, keypoints);
-	for (unsigned int i = 0; i < keypoints.size(); i++)
-	{
-		cv::circle(input, keypoints.at(i).pt, 10, cv::Scalar(255, 255, 255));
-		//std::cout << "keypoint[" << i << "]=<" << keypoints.at(i).pt.x << ", " << keypoints.at(i).pt.y << ">" << std::endl;
+	for (unsigned int i = 0; i < keypoints.size(); i++) {
+		cv::circle(input, keypoints.at(i).pt, 10,
+			   cv::Scalar(255, 255, 255));
 	}
 	cv::imwrite(argv[2], input);
-	
+
 	return EXIT_SUCCESS;
 }
