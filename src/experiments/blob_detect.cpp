@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 3) {
+	if (argc != 2) {
 		std::
 		    cerr << "Usage: " << argv[0] <<
 		    " [INPUT FILE] [OUTPUT FILE]" << std::endl;
@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
 		cv::circle(input, keypoints.at(i).pt, 10,
 			   cv::Scalar(255, 255, 255));
 	}
-	cv::imwrite(argv[2], input);
+	//cv::imwrite(argv[2], input);
+	cv::imshow("Blob detector", input);
 
 	return EXIT_SUCCESS;
 }
