@@ -38,8 +38,6 @@ RXPacket::RXPacket()
 	rx_packet.checksum = compute_checksum();
 	rx_packet_size = sizeof(rx_packet_t);
 	is_valid = false;
-	std::cout << (int8_t) (get_header() >> 8) << std::endl;
-	std::cout << (int8_t) get_header() << std::endl;
 }
 
 int16_t RXPacket::get_header()
