@@ -65,7 +65,7 @@ class TXPacket {
 		int8_t spare;
 		int16_t checksum;
 	} __attribute__ ((__packed__)) tx_packet_t;
-	const int servo_ctl_length = 6;
+	int servo_ctl_length;
 	tx_packet_t tx_packet;
 	 std::mutex tx_packet_mtx;
 	size_t tx_packet_size;

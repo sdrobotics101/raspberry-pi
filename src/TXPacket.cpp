@@ -34,6 +34,7 @@ TXPacket::TXPacket()
 	tx_packet.rot_z = 0;
 	tx_packet.pos_z = 0;
 	tx_packet.torpedo_ctl = 0;
+	servo_ctl_length = 6;
 	for (int i = 0; i < servo_ctl_length; i++)
 		tx_packet.servo_ctl[i] = 0;
 	tx_packet.spare = 0;
