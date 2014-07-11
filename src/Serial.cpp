@@ -35,7 +35,10 @@ Serial::Serial()
 Serial::~Serial()
 {
 	is_running = false;
-	serial_thread->join();
+	transmit_thread->join();
+	receive_thread->join();
+	delete transmit_thread;
+	delete receive_thread;
 	close(uart0_filestream);
 }
 
@@ -59,7 +62,8 @@ void Serial::open_serial()
 
 void Serial::start()
 {
-	serial_thread = new std::thread(&Serial::run_thread, this);
+	transmit_thread = new std::thread(&Serial::run_transmit_thread, this);
+	receive_thread = new std::thread(&Serial::run_receive_thread, this);
 }
 
 TXPacket *Serial::get_tx_packet()
@@ -72,13 +76,18 @@ RXPacket *Serial::get_rx_packet()
 	return &rx_packet;
 }
 
-void Serial::run_thread()
+void Serial::run_transmit_thread()
 {
 	is_running = true;
-	while (is_running) {
-		if (receive_packet())
-			transmit_packet();
-	}
+	while (is_running)
+		transmit_packet();
+}
+
+void Serial::run_receive_thread()
+{
+	is_running = true;
+	while (is_running)
+		receive_packet();
 }
 
 bool Serial::receive_packet()
@@ -96,8 +105,8 @@ bool Serial::receive_packet()
 		rx_buffer[rx_length] = *tmp_rx_buffer;
 		rx_length += tmp_rx_length;
 		if (rx_length == 2
-		    && (rx_buffer[0] != (int8_t) (rx_packet.get_header() >> 8)
-			|| rx_buffer[1] != (int8_t) rx_packet.get_header())) {
+		    && (rx_buffer[0] != (int8_t) (rx_packet.get_header())
+			|| rx_buffer[1] != (int8_t) (rx_packet.get_header() >> 8))) {
 			return false;
 		}
 	}
@@ -112,9 +121,5 @@ void Serial::transmit_packet()
 	}
 	unsigned char tx_buffer[tx_packet.size()];
 	tx_packet.get_buffer(tx_buffer);
-	int count = write(uart0_filestream, &tx_buffer[0], tx_packet.size());
-	if (count < 0) {
-		std::cerr << "UART TX error on /dev/ttyAMA0." << std::endl;
-		exit(EXIT_FAILURE);
-	}
+	write(uart0_filestream, &tx_buffer[0], tx_packet.size());
 }
