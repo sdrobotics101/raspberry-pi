@@ -43,8 +43,8 @@ class Serial {
 	TXPacket tx_packet;
 	RXPacket rx_packet;
 	bool is_running;
-	std::thread * transmit_thread;
-	std::thread * receive_thread;
+	 std::thread * transmit_thread;
+	 std::thread * receive_thread;
 };
 
 #endif				// Serial_hpp

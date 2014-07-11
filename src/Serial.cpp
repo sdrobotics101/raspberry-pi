@@ -106,9 +106,9 @@ bool Serial::receive_packet()
 		rx_length += tmp_rx_length;
 		if (rx_length == 2
 		    && (rx_buffer[0] != (int8_t) (rx_packet.get_header())
-			|| rx_buffer[1] != (int8_t) (rx_packet.get_header() >> 8))) {
+			|| rx_buffer[1] !=
+			(int8_t) (rx_packet.get_header() >> 8)))
 			return false;
-		}
 	}
 	return rx_packet.read_buffer(rx_buffer);
 }
