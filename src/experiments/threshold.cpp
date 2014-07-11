@@ -16,7 +16,8 @@ int main(int argc, char *argv[])
 	cv::Mat hsv_thresh_hue_upper;
 	cv::Mat hsv_thresh_hue_lower;
 	cv::Mat output;
-	cv::threshold(*(input_hsv.get_hue_mat()), hsv_thresh_hue_lower, 40, 255, CV_THRESH_BINARY);
+	cv::threshold(*(input_hsv.get_hue_mat()), hsv_thresh_hue_lower, 40, 255,
+		      CV_THRESH_BINARY);
 	cv::threshold(*(input_hsv.get_hue_mat()), hsv_thresh_hue_upper, 50, 255,
 		      CV_THRESH_BINARY);
 	output = hsv_thresh_hue_lower & hsv_thresh_hue_upper;

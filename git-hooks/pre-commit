@@ -1,0 +1,16 @@
+#!/bin/bash -f
+topdir="`git rev-parse --show-toplevel`"
+cd "$topdir"
+find src -type f -iname \*.cpp -exec indent -linux {} \;
+find src -type f -iname \*.hpp -exec indent -linux {} \;
+rm -rf build-test
+mkdir -p build-test
+cd build-test
+cmake ..
+procs="`grep -c ^processor /proc/cpuinfo`"
+procs=$(($procs+1))
+make -j ${procs}
+retval=$?
+cd ..
+rm -rf build-test
+exit $retval
