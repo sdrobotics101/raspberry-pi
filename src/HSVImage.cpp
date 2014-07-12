@@ -30,10 +30,9 @@ HSVImage::HSVImage(cv::Mat & input_image)
 void HSVImage::load_rgb_image(cv::Mat & input_image)
 {
 	input_image.copyTo(rgb);
-	cvtColor(input_image, input_image, CV_RGB2HSV);
+	cvtColor(rgb, hsv, CV_RGB2HSV);
 	std::vector < cv::Mat > slices;
-	split(input_image, slices);
-	input_image.copyTo(hsv);
+	split(hsv, slices);
 	slices.at(0).copyTo(hue);
 	slices.at(1).copyTo(saturation);
 	slices.at(2).copyTo(value);
