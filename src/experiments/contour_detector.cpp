@@ -30,17 +30,17 @@ int main(int argc, char *argv[])
 	std::vector < cv::RotatedRect > boundingRects;
 	cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
 
-	for (int i = 0; i < contours.size(); i++)	// Remove contours with area < 1000
+	for (uint i = 0; i < contours.size(); i++)	// Remove contours with area < 1000
 	{
 		if (cv::contourArea(contours.at(i)) < 1000) {
 			contours.erase(contours.begin() + i);
 			i--;
 		}
 	}
-	for (int i = 0; i < contours.size(); i++)	// Compute minimum area bounding rectangles
+	for (uint i = 0; i < contours.size(); i++)	// Compute minimum area bounding rectangles
 		boundingRects.push_back(cv::minAreaRect(contours.at(i)));
 	cv::namedWindow("Contour Detector", 0);
-	for (int i = 0; i < contours.size(); i++) {	// Show everything
+	for (uint i = 0; i < contours.size(); i++) {	// Show everything
 		cv::Point2f boundingPoints[4];
 		boundingRects.at(i).points(boundingPoints);
 		cv::Mat output;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 			cv::line(output, boundingPoints[i],
 				 boundingPoints[(i + 1) % 4], color);
 		cv::imshow("Contour Detector", output);
-		for (int j = 0; j < contours.at(i).size(); j++) {
+		for (uint j = 0; j < contours.at(i).size(); j++) {
 			std::cout << contours.at(i).at(j);
 			if (j != contours.at(i).size() - 1)
 				std::cout << ", ";

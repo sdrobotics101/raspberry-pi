@@ -33,7 +33,7 @@ void trackbar_callback(int param, void *obj)
 	cv::dilate(gray, gray, cv::Mat(), cv::Point(-1, -1));
 	std::vector < std::vector < cv::Point > >contours;
 	cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-	for (int i = 0; i < contours.size(); i++) {
+	for (uint i = 0; i < contours.size(); i++) {
 		cv::Scalar color(0, 0, 0);
 		cv::drawContours(input, contours, i, color, 5, 8);
 	}
