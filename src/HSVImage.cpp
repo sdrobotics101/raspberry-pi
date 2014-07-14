@@ -22,6 +22,10 @@
 #include <opencv2/opencv.hpp>
 #include "HSVImage.hpp"
 
+HSVImage::HSVImage()
+{
+}
+
 HSVImage::HSVImage(cv::Mat & input_image)
 {
 	load_rgb_image(input_image);
@@ -36,29 +40,4 @@ void HSVImage::load_rgb_image(cv::Mat & input_image)
 	slices.at(0).copyTo(hue);
 	slices.at(1).copyTo(saturation);
 	slices.at(2).copyTo(value);
-}
-
-cv::Mat * HSVImage::get_rgb_mat()
-{
-	return &rgb;
-}
-
-cv::Mat * HSVImage::get_hsv_mat()
-{
-	return &hsv;
-}
-
-cv::Mat * HSVImage::get_hue_mat()
-{
-	return &hue;
-}
-
-cv::Mat * HSVImage::get_saturation_mat()
-{
-	return &saturation;
-}
-
-cv::Mat * HSVImage::get_value_mat()
-{
-	return &value;
 }

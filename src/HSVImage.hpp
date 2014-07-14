@@ -25,14 +25,9 @@
 
 class HSVImage {
  public:
+	HSVImage();
 	HSVImage(cv::Mat & rgb_img);
 	void load_rgb_image(cv::Mat & rgb_img);
-	 cv::Mat * get_rgb_mat();
-	 cv::Mat * get_hsv_mat();
-	 cv::Mat * get_hue_mat();
-	 cv::Mat * get_saturation_mat();
-	 cv::Mat * get_value_mat();
- private:
 	 cv::Mat rgb;
 	 cv::Mat hsv;
 	 cv::Mat hue;
