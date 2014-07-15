@@ -18,10 +18,12 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
+#include <stdlib.h>
 #include "Robot.hpp"
 
 int main(int argc, char *argv[])
 {
 	Robot robot;
-	return robot.start();
+	robot.start();
+	return EXIT_SUCCESS;
 }

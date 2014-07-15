@@ -25,7 +25,7 @@
 
 class Robot {
  public:
-	int start();
+	void start();
  private:
 	 Serial serial;
 };

@@ -18,12 +18,30 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#include <stdlib.h>
+#include <iostream>
+#include <thread>
+#include <chrono>
 #include "Robot.hpp"
+#include "Serial.hpp"
+#include "TXPacket.hpp"
 
-int Robot::start()
+void Robot::start()
 {
 	serial.open_serial();
 	serial.start();
-	return EXIT_SUCCESS;
+	std::cout << "Moving forward at full speed";
+	serial.get_tx_packet()->set_vel_x(127);
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	serial.get_tx_packet()->set_vel_x(0);
+	std::cout << "done" << std::endl;
+	std::cout << "Moving up at full speed";
+	serial.get_tx_packet()->set_vel_z(127);
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	serial.get_tx_packet()->set_vel_z(0);
+	std::cout << "done" << std::endl;
+	std::cout << "Moving backward at full speed";
+	serial.get_tx_packet()->set_vel_x(-128);
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	serial.get_tx_packet()->set_vel_x(0);
+	std::cout << "done" << std::endl;
 }
