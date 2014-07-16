@@ -5,9 +5,9 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 5) {
+	if (argc != 6) {
 		std::cerr << "Usage: " << argv[0] <<
-		    " [INPUT FILE] [HUE LOWER THRESHOLD] [HUE UPPER THRESHOLD] [CANNY THRESHOLD]"
+		    " [INPUT FILE] [HUE LOWER THRESHOLD] [HUE UPPER THRESHOLD] [CANNY THRESHOLD] [OUTPUT FILE]"
 		    << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -39,33 +39,32 @@ int main(int argc, char *argv[])
 	}
 	for (uint i = 0; i < contours.size(); i++)	// Compute minimum area bounding rectangles
 		boundingRects.push_back(cv::minAreaRect(contours.at(i)));
-	cv::namedWindow("Contour Detector", 0);
+	cv::Mat output;
+	img.rgb.copyTo(output);
 	for (uint i = 0; i < contours.size(); i++) {	// Show everything
 		cv::Point2f boundingPoints[4];
 		boundingRects.at(i).points(boundingPoints);
-		cv::Mat output;
-		img.rgb.copyTo(output);
-		std::cout << "Contour " << i << ": [";
+		//std::cout << "Contour " << i << ": [";
 		cv::Scalar color(0, 0, 0);
 		//cv::drawContours(output, contours, i, color, 5, 8);
 		for (int i = 0; i < 4; i++)
 			cv::line(output, boundingPoints[i],
 				 boundingPoints[(i + 1) % 4], color);
-		cv::imshow("Contour Detector", output);
-		for (uint j = 0; j < contours.at(i).size(); j++) {
-			std::cout << contours.at(i).at(j);
-			if (j != contours.at(i).size() - 1)
-				std::cout << ", ";
-		}
-		std::cout << "], Bounding: ";
-		for (int j = 0; j < 4; j++) {
-			std::cout << boundingPoints[j];
-			if (j != 3)
-				std::cout << ", ";
-		}
-		std::cout << std::endl;
-		cv::waitKey(0);
+		//cv::imshow("Contour Detector", output);
+		//for (uint j = 0; j < contours.at(i).size(); j++) {
+		//std::cout << contours.at(i).at(j);
+		//if (j != contours.at(i).size() - 1)
+		//std::cout << ", ";
+		//}
+		//std::cout << "], Bounding: ";
+		//for (int j = 0; j < 4; j++) {
+		//      std::cout << boundingPoints[j];
+		//      if (j != 3)
+		//                      std::cout << ", ";
+		//}
+		//std::cout << std::endl;
 	}
+	cv::imwrite(argv[5], output);
 
 	return EXIT_SUCCESS;
 }

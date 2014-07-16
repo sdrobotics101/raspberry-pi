@@ -184,19 +184,13 @@ void TXPacket::get_buffer(unsigned char buffer[])
 
 int16_t TXPacket::compute_checksum()
 {
-	int32_t checksum32 = 0;
-	checksum32 += tx_packet.header;
-	checksum32 += tx_packet.vel_x;
-	checksum32 += tx_packet.vel_y;
-	checksum32 += tx_packet.vel_z;
-	checksum32 += tx_packet.rot_x;
-	checksum32 += tx_packet.rot_y;
-	checksum32 += tx_packet.rot_z;
-	checksum32 += tx_packet.pos_z;
-	checksum32 += tx_packet.torpedo_ctl;
-	for (int i = 0; i < servo_ctl_length; i++)
-		checksum32 += tx_packet.servo_ctl[i];
-	checksum32 += tx_packet.spare;
-	int16_t checksum16 = checksum32;
-	return checksum16;
+	int16_t checksum = 0;
+	unsigned char buffer[tx_packet_size];
+	memcpy(buffer, &tx_packet, tx_packet_size);
+	for (unsigned char *buffer_ptr = buffer;
+	     buffer_ptr <
+	     buffer + tx_packet_size -
+	     sizeof(tx_packet.checksum) /* skip checksum */ ; buffer_ptr++)
+		checksum += *buffer_ptr;
+	return checksum;
 }

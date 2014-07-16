@@ -163,16 +163,13 @@ void RXPacket::get_buffer(unsigned char buffer[])
 
 int16_t RXPacket::compute_checksum()
 {
-	int32_t checksum32 = 0;
-	checksum32 += rx_packet.header;
-	checksum32 += rx_packet.acc_x;
-	checksum32 += rx_packet.acc_y;
-	checksum32 += rx_packet.acc_z;
-	checksum32 += rx_packet.mag_x;
-	checksum32 += rx_packet.mag_y;
-	checksum32 += rx_packet.mag_z;
-	checksum32 += rx_packet.depth;
-	checksum32 += rx_packet.spare;
-	int16_t checksum16 = checksum32;
-	return checksum16;
+	int16_t checksum = 0;
+	unsigned char buffer[rx_packet_size];
+	memcpy(buffer, &rx_packet, rx_packet_size);
+	for (unsigned char *buffer_ptr = buffer;
+	     buffer_ptr <
+	     buffer + rx_packet_size -
+	     sizeof(rx_packet.checksum) /* skip checksum */ ; buffer_ptr++)
+		checksum += *buffer_ptr;
+	return checksum;
 }
