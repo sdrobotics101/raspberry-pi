@@ -25,6 +25,7 @@
 TXPacket::TXPacket()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
+	tx_packet_size = sizeof(tx_packet_t);
 	tx_packet.header = 0xbdfa;
 	tx_packet.vel_x = 0;
 	tx_packet.vel_y = 0;
@@ -39,7 +40,6 @@ TXPacket::TXPacket()
 		tx_packet.servo_ctl[i] = 0;
 	tx_packet.spare = 0;
 	tx_packet.checksum = compute_checksum();
-	tx_packet_size = sizeof(tx_packet_t);
 	is_valid = false;
 }
 

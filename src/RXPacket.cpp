@@ -26,6 +26,7 @@
 RXPacket::RXPacket()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet_size = sizeof(rx_packet_t);
 	rx_packet.header = 0x1d3b;
 	rx_packet.acc_x = 0;
 	rx_packet.acc_y = 0;
@@ -36,7 +37,6 @@ RXPacket::RXPacket()
 	rx_packet.depth = 0;
 	rx_packet.spare = 0;
 	rx_packet.checksum = compute_checksum();
-	rx_packet_size = sizeof(rx_packet_t);
 	is_valid = false;
 }
 
