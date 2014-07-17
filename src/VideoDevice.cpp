@@ -57,13 +57,13 @@ void VideoDevice::capture_from_camera()
 {
 	while (!is_finished) {
 		camera >> image;
-		is_ready = 1;
+		is_ready = true;
 	}
 }
 
 VideoDevice::~VideoDevice()
 {
-	is_finished = 1;
+	is_finished = true;
 	capture_thread->join();
 	delete capture_thread;
 }
