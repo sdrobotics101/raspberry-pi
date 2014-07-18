@@ -47,7 +47,7 @@ class RXPacket {
 	bool read_buffer(unsigned char buffer[]);
 	void get_buffer(unsigned char buffer[]);
  private:
-	 int16_t compute_checksum();
+	 uint16_t compute_checksum();
 	typedef struct {
 		int16_t header;
 		int8_t acc_x;
@@ -58,7 +58,7 @@ class RXPacket {
 		int8_t mag_z;
 		int8_t depth;
 		int8_t spare;
-		int16_t checksum;
+		uint16_t checksum;
 	} __attribute__ ((__packed__)) rx_packet_t;
 	rx_packet_t rx_packet;
 	 std::mutex rx_packet_mtx;

@@ -161,9 +161,9 @@ void RXPacket::get_buffer(unsigned char buffer[])
 	memcpy(buffer, &rx_packet, rx_packet_size);
 }
 
-int16_t RXPacket::compute_checksum()
+uint16_t RXPacket::compute_checksum()
 {
-	int16_t checksum = 0;
+	uint16_t checksum = 0;
 	unsigned char buffer[rx_packet_size];
 	memcpy(buffer, &rx_packet, rx_packet_size);
 	for (unsigned char *buffer_ptr = buffer;

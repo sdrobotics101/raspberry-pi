@@ -24,6 +24,8 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "Serial.hpp"
 
 Serial::Serial()
@@ -79,8 +81,10 @@ RXPacket *Serial::get_rx_packet()
 void Serial::run_transmit_thread()
 {
 	is_running = true;
-	while (is_running)
+	while (is_running) {
 		transmit_packet();
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+	}
 }
 
 void Serial::run_receive_thread()

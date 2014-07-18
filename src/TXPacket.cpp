@@ -182,9 +182,9 @@ void TXPacket::get_buffer(unsigned char buffer[])
 	memcpy(buffer, &tx_packet, tx_packet_size);
 }
 
-int16_t TXPacket::compute_checksum()
+uint16_t TXPacket::compute_checksum()
 {
-	int16_t checksum = 0;
+	uint16_t checksum = 0;
 	unsigned char buffer[tx_packet_size];
 	memcpy(buffer, &tx_packet, tx_packet_size);
 	for (unsigned char *buffer_ptr = buffer;

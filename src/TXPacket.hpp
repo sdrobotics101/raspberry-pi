@@ -50,7 +50,7 @@ class TXPacket {
 	bool read_buffer(unsigned char buffer[]);
 	void get_buffer(unsigned char buffer[]);
  private:
-	 int16_t compute_checksum();
+	 uint16_t compute_checksum();
 	typedef struct {
 		int16_t header;
 		int8_t vel_x;
@@ -63,7 +63,7 @@ class TXPacket {
 		int8_t torpedo_ctl;
 		int8_t servo_ctl[6];
 		int8_t spare;
-		int16_t checksum;
+		uint16_t checksum;
 	} __attribute__ ((__packed__)) tx_packet_t;
 	int servo_ctl_length;
 	tx_packet_t tx_packet;
