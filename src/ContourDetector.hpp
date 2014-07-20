@@ -21,6 +21,7 @@
 #ifndef ContourDetector_hpp
 #define ContourDetector_hpp
 
+#include <vector>
 #include <opencv2/opencv.hpp>
 #include "Contour.hpp"
 
@@ -45,6 +46,9 @@ class ContourDetector {
 		int minArea;
 		int maxArea;
 
+		bool filterByAspectRatio;
+		double aspectRatio;
+
 		bool filterWithCanny;
 		int minCanny;
 		int maxCanny;
@@ -61,7 +65,7 @@ class ContourDetector {
 	};
 	 ContourDetector(const ContourDetector::Params & parameters =
 			 ContourDetector::Params());
-	Contour detect(cv::Mat image);
+	 std::vector < Contour > detect(cv::Mat image);
  private:
 	 Params params;
 };

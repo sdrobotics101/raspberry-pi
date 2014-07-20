@@ -1,4 +1,4 @@
-/* Contour.cpp -- Implementation of Contour class
+/* Rectangle.hpp -- Header file for Rectangle class
 
    Copyright (C) 2014 Tushar Pankaj
    
@@ -18,22 +18,27 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
+#ifndef Rectangle_hpp
+#define Rectangle_hpp
+
 #include <vector>
 #include <opencv2/opencv.hpp>
 #include "Contour.hpp"
 
-Contour::Contour(std::vector < cv::Point2d > points)
-{
-	contour = points;
-	area = cv::contourArea(contour);
-}
+class Rectangle:public Contour {
+ public:
+	Rectangle(std::vector < cv::Point2d > points);
+	cv::Point2f get_center();
+	double get_width();
+	double get_height();
+	double get_aspect_ratio();
+	double get_angle();
+	double get_log_area_ratio();
+ protected:
+	 cv::RotatedRect rectangle;
+	double aspect_ratio;
+	double angle;
+	double log_area_ratio;
+};
 
-std::vector < cv::Point2d > Contour::get_points()
-{
-	return contour;
-}
-
-double Contour::get_area()
-{
-	return area;
-}
+#endif				// Rectangle_hpp

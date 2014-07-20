@@ -40,6 +40,9 @@ ContourDetector::Params::Params()
 	minArea = 0;
 	maxArea = 1e6;
 
+	filterByAspectRatio = false;
+	aspectRatio = 1.0;
+
 	filterWithCanny = true;
 	minCanny = 0;
 	maxCanny = 50;
@@ -47,13 +50,13 @@ ContourDetector::Params::Params()
 	filterWithBlur = true;
 }
 
-ContourDetector::ContourDetector(const ContourDetector::
-				 Params & parameters):params(parameters)
+ContourDetector::
+ContourDetector(const ContourDetector::Params & parameters):params(parameters)
 {
 }
 
-Contour ContourDetector::detect(cv::Mat image)
+std::vector < Contour > ContourDetector::detect(cv::Mat image)
 {
 	// TODO: Implement detection algorithm
-	return Contour();
+	return std::vector < Contour > ();
 }

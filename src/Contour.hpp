@@ -21,10 +21,17 @@
 #ifndef Contour_hpp
 #define Contour_hpp
 
+#include <vector>
 #include <opencv2/opencv.hpp>
 
 class Contour {
-
+ public:
+	Contour(std::vector < cv::Point2d > points);
+	std::vector < cv::Point2d > get_points();
+	double get_area();
+ protected:
+	 std::vector < cv::Point2d > contour;
+	double area;
 };
 
 #endif				// Contour_hpp

@@ -1,4 +1,4 @@
-/* Contour.cpp -- Implementation of Contour class
+/* Circle.cpp -- Implementation of Circle class
 
    Copyright (C) 2014 Tushar Pankaj
    
@@ -18,22 +18,27 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#include <vector>
+#include <math.h>
 #include <opencv2/opencv.hpp>
-#include "Contour.hpp"
+#include "Circle.hpp"
 
-Contour::Contour(std::vector < cv::Point2d > points)
+ Circle::Circle(std::vector < cv::Point2d > points):Contour(points)
 {
-	contour = points;
-	area = cv::contourArea(contour);
+	cv::Point2f center_tmp;
+	float radius_tmp;
+	cv::minEnclosingCircle(contour, center_tmp, radius_tmp);
+	center = center_tmp;
+	radius = radius_tmp;
+	area = M_PI * pow(radius, 2);
+	log_area_ratio = log(area / cv::contourArea(contour));
 }
 
-std::vector < cv::Point2d > Contour::get_points()
+cv::Point2d Circle::get_center()
 {
-	return contour;
+	return center;
 }
 
-double Contour::get_area()
+double Circle::get_radius()
 {
-	return area;
+	return radius;
 }
