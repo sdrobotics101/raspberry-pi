@@ -21,6 +21,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <string>
 #include "Robot.hpp"
 #include "Serial.hpp"
 #include "TXPacket.hpp"
@@ -29,56 +30,28 @@ void Robot::start()
 {
 	serial.open_serial();
 	serial.start();
-	std::chrono::milliseconds ramp_itr_time = std::chrono::milliseconds(30);
-	std::chrono::milliseconds run_time = std::chrono::milliseconds(5000);
 
-	std::cout << "Moving in +x direction..." << std::flush;
-	for (int i = 0; i <= 127; i++) {
-		serial.get_tx_packet()->set_vel_x(i);
-		std::this_thread::sleep_for(ramp_itr_time);
+	for (;;) {
+		std::cout << "cubeception> ";
+		std::string key;
+		int value;
+		std::cin >> key >> value;
+		int8_t value8 = (int8_t) value;
+		if (key == "vel_x") {
+			serial.get_tx_packet()->set_vel_x(value8);
+			std::cout << "vel_x =" << value << std::endl;
+		} else if (key == "vel_y") {
+			serial.get_tx_packet()->set_vel_y(value8);
+			std::cout << "vel_y = " << value << std::endl;
+		} else if (key == "vel_z") {
+			serial.get_tx_packet()->set_vel_z(value8);
+			std::cout << "vel_z = " << value << std::endl;
+		} else if (key == "sleep") {
+			std::cout << "Sleeping for " << value << " ms" << std::
+			    endl;
+			std::this_thread::sleep_for(std::chrono::
+						    milliseconds(value));
+		} else
+			std::cout << key << ": command not found" << std::endl;
 	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_x(0);
-	std::cout << "done" << std::endl;
-	std::cout << "Moving in -x direction..." << std::flush;
-	for (int i = 0; i >= -128; i--) {
-		serial.get_tx_packet()->set_vel_x(i);
-		std::this_thread::sleep_for(ramp_itr_time);
-	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_x(0);
-	std::cout << "done" << std::endl;
-	std::cout << "Moving in +y direction..." << std::flush;
-	for (int i = 0; i <= 127; i++) {
-		serial.get_tx_packet()->set_vel_y(i);
-		std::this_thread::sleep_for(ramp_itr_time);
-	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_y(0);
-	std::cout << "done" << std::endl;
-	std::cout << "Moving in -y direction..." << std::flush;
-	for (int i = 0; i >= -128; i--) {
-		serial.get_tx_packet()->set_vel_y(i);
-		std::this_thread::sleep_for(ramp_itr_time);
-	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_y(0);
-	std::cout << "done" << std::endl;
-	std::cout << "Moving in +z direction..." << std::flush;
-	for (int i = 0; i <= 127; i++) {
-		serial.get_tx_packet()->set_vel_z(i);
-		std::this_thread::sleep_for(ramp_itr_time);
-	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_z(0);
-	std::cout << "done" << std::endl;
-	std::cout << "Moving in -z direction..." << std::flush;
-	for (int i = 0; i >= -128; i--) {
-		serial.get_tx_packet()->set_vel_z(i);
-		std::this_thread::sleep_for(ramp_itr_time);
-	}
-	std::this_thread::sleep_for(run_time);
-	serial.get_tx_packet()->set_vel_z(0);
-	std::cout << "done" << std::endl;
-	while (1) ;
 }
