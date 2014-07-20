@@ -47,10 +47,10 @@ void Robot::start()
 			serial.get_tx_packet()->set_vel_z(value8);
 			std::cout << "vel_z = " << value << std::endl;
 		} else if (key == "sleep") {
-			std::cout << "Sleeping for " << value << " ms" << std::
-			    endl;
-			std::this_thread::sleep_for(std::chrono::
-						    milliseconds(value));
+			std::cout << "Sleeping for " << value << " ms" <<
+			    std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds
+						    (value));
 		} else
 			std::cout << key << ": command not found" << std::endl;
 	}
