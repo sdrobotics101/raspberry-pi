@@ -26,6 +26,7 @@
 
 class Contour {
  public:
+	Contour();
 	Contour(std::vector < cv::Point2d > points);
 	std::vector < cv::Point2d > get_points();
 	double get_area();

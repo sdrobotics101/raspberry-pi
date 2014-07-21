@@ -1,0 +1,5 @@
+#!/bin/bash -f
+topdir="`git rev-parse --show-toplevel`"
+cd "$topdir"
+find src -type f -iname \*.cpp -exec indent -linux {} \;
+find src -type f -iname \*.hpp -exec indent -linux {} \;

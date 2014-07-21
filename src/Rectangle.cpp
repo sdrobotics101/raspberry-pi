@@ -22,12 +22,16 @@
 #include <opencv2/opencv.hpp>
 #include "Rectangle.hpp"
 
- Rectangle::Rectangle(std::vector < cv::Point2d > points):Contour(points)
+Rectangle::Rectangle(std::vector < cv::Point2d > points)
 {
-	rectangle = cv::minAreaRect(contour);
+	rectangle = cv::minAreaRect(points);
 	aspect_ratio = (double)get_width() / (double)get_height();
 	area = (double)get_width() * (double)get_height();
-	log_area_ratio = log(area / cv::contourArea(contour));
+	log_area_ratio = log(area / cv::contourArea(points));
+	cv::Point2f pts[4];
+	rectangle.points(pts);
+	for (int i = 0; i < 4; i++)
+		contour.push_back(pts[i]);
 }
 
 cv::Point2f Rectangle::get_center()

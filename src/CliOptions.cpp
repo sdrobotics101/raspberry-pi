@@ -22,21 +22,20 @@
 #include <getopt.h>
 #include "CliOptions.hpp"
 
-CliOptions::CliOptions(int argc, char* argv[])
+CliOptions::CliOptions(int argc, char *argv[])
 {
 	is_interactive_flag = false;
-	while (true)
-	{
+	while (true) {
 		static struct option long_options[] = {
 			{"interactive", no_argument, 0, 'i'},
 			{0, 0, 0, 0}
 		};
 		int option_index = 0;
-		int c = getopt_long(argc, argv, "i", long_options, &option_index);
+		int c =
+		    getopt_long(argc, argv, "i", long_options, &option_index);
 		if (c == -1)
 			break;
-		switch (c)
-		{
+		switch (c) {
 		case 0:
 			break;
 		case 'i':

@@ -40,8 +40,7 @@ void Robot::set_period(int new_period)
 
 void Robot::autonomous_init()
 {
-	while (true)
-	{
+	while (true) {
 		autonomous_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
 	}
@@ -53,8 +52,7 @@ void Robot::autonomous_periodic()
 
 void Robot::teleop_init()
 {
-	while (true)
-	{
+	while (true) {
 		teleop_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
 	}
@@ -77,8 +75,7 @@ void Robot::teleop_periodic()
 		serial.get_tx_packet()->set_vel_z(value8);
 		std::cout << "Setting vel_z = " << value << std::endl;
 	} else if (key == "sleep") {
-		std::cout << "Sleeping for " << value << " ms" <<
-			std::endl;
+		std::cout << "Sleeping for " << value << " ms" << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(value));
 	} else
 		std::cout << key << ": command not found" << std::endl;

@@ -22,6 +22,10 @@
 #include <opencv2/opencv.hpp>
 #include "Contour.hpp"
 
+Contour::Contour()
+{
+}
+
 Contour::Contour(std::vector < cv::Point2d > points)
 {
 	contour = points;

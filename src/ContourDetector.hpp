@@ -30,38 +30,27 @@ class ContourDetector {
 	struct Params {
 		Params();
 
-		bool filterByHue;
-		int minHue;
-		int maxHue;
+		bool filter_by_hue;
+		int min_hue;
+		int max_hue;
 
-		bool filterBySaturation;
-		int minSaturation;
-		int maxSaturation;
+		bool filter_by_saturation;
+		int min_saturation;
+		int max_saturation;
 
-		bool filterByValue;
-		int minValue;
-		int maxValue;
+		bool filter_by_value;
+		int min_value;
+		int max_value;
 
-		bool filterByArea;
-		int minArea;
-		int maxArea;
+		bool filter_by_area;
+		int min_area;
+		int max_area;
 
-		bool filterByAspectRatio;
-		double aspectRatio;
+		bool filter_with_canny;
+		int min_canny;
+		int max_canny;
 
-		bool filterWithCanny;
-		int minCanny;
-		int maxCanny;
-
-		bool filterWithBlur;
-
-		/*bool filterByShape;
-		   enum Shape // Move to Contour.hpp
-		   {
-		   CIRCLE,
-		   RECTANGLE
-		   };
-		   Shape contourShape; */
+		bool filter_with_blur;
 	};
 	 ContourDetector(const ContourDetector::Params & parameters =
 			 ContourDetector::Params());
