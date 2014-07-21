@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
 	cv::Mat hsv_thresh_hue_lower;
 	cv::Mat thresholded;
 	cv::threshold(img.hue, hsv_thresh_hue_lower, atoi(argv[2]), 255,
-		      CV_THRESH_BINARY);
+		      cv::THRESH_BINARY);
 	cv::threshold(img.hue, hsv_thresh_hue_upper, atoi(argv[3]), 255,
-		      CV_THRESH_BINARY_INV);
+		      cv::THRESH_BINARY_INV);
 	thresholded = hsv_thresh_hue_lower & hsv_thresh_hue_upper;
 	cv::Mat gray0;
 	thresholded.copyTo(gray0);
@@ -27,29 +27,29 @@ int main(int argc, char *argv[])
 	cv::Canny(gray0, gray, 0, atoi(argv[4]), 5);
 	cv::dilate(gray, gray, cv::Mat(), cv::Point(-1, -1));
 	std::vector < std::vector < cv::Point > >contours;
-	std::vector < cv::RotatedRect > boundingRects;
+	//std::vector < cv::RotatedRect > boundingRects;
 	cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-
-	for (uint i = 0; i < contours.size(); i++)	// Remove contours with area < 1000
-	{
-		if (cv::contourArea(contours.at(i)) < 1000) {
-			contours.erase(contours.begin() + i);
-			i--;
-		}
-	}
-	for (uint i = 0; i < contours.size(); i++)	// Compute minimum area bounding rectangles
-		boundingRects.push_back(cv::minAreaRect(contours.at(i)));
+	
+	/*for (uint i = 0; i < contours.size(); i++)	// Remove contours with area < 1000
+	  {
+	  if (cv::contourArea(contours.at(i)) < 1000) {
+	  contours.erase(contours.begin() + i);
+	  i--;
+	  }
+	  }
+	  for (uint i = 0; i < contours.size(); i++)	// Compute minimum area bounding rectangles
+	  boundingRects.push_back(cv::minAreaRect(contours.at(i)));*/
 	cv::Mat output;
 	img.rgb.copyTo(output);
 	for (uint i = 0; i < contours.size(); i++) {	// Show everything
-		cv::Point2f boundingPoints[4];
-		boundingRects.at(i).points(boundingPoints);
-		//std::cout << "Contour " << i << ": [";
-		cv::Scalar color(0, 0, 0);
-		//cv::drawContours(output, contours, i, color, 5, 8);
-		for (int i = 0; i < 4; i++)
+		cv::drawContours(output, contours, i, cv::Scalar(0, 0, 0), 5, 8);
+/*cv::Point2f boundingPoints[4];
+  boundingRects.at(i).points(boundingPoints);
+  //std::cout << "Contour " << i << ": [";
+  cv::Scalar color(0, 0, 0);
+  for (int i = 0; i < 4; i++)
 			cv::line(output, boundingPoints[i],
-				 boundingPoints[(i + 1) % 4], color);
+			boundingPoints[(i + 1) % 4], color);*/
 		//cv::imshow("Contour Detector", output);
 		//for (uint j = 0; j < contours.at(i).size(); j++) {
 		//std::cout << contours.at(i).at(j);
