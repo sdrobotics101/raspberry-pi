@@ -26,32 +26,60 @@
 #include "Serial.hpp"
 #include "TXPacket.hpp"
 
-void Robot::start()
+Robot::Robot()
 {
+	period = 10;
 	serial.open_serial();
 	serial.start();
+}
 
-	for (;;) {
-		std::cout << "cubeception> ";
-		std::string key;
-		int value;
-		std::cin >> key >> value;
-		int8_t value8 = (int8_t) value;
-		if (key == "vel_x") {
-			serial.get_tx_packet()->set_vel_x(value8);
-			std::cout << "vel_x =" << value << std::endl;
-		} else if (key == "vel_y") {
-			serial.get_tx_packet()->set_vel_y(value8);
-			std::cout << "vel_y = " << value << std::endl;
-		} else if (key == "vel_z") {
-			serial.get_tx_packet()->set_vel_z(value8);
-			std::cout << "vel_z = " << value << std::endl;
-		} else if (key == "sleep") {
-			std::cout << "Sleeping for " << value << " ms" <<
-			    std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds
-						    (value));
-		} else
-			std::cout << key << ": command not found" << std::endl;
+void Robot::set_period(int new_period)
+{
+	period = new_period;
+}
+
+void Robot::autonomous_init()
+{
+	while (true)
+	{
+		autonomous_periodic();
+		std::this_thread::sleep_for(std::chrono::milliseconds(period));
 	}
+}
+
+void Robot::autonomous_periodic()
+{
+}
+
+void Robot::teleop_init()
+{
+	while (true)
+	{
+		teleop_periodic();
+		std::this_thread::sleep_for(std::chrono::milliseconds(period));
+	}
+}
+
+void Robot::teleop_periodic()
+{
+	std::cout << "cubeception> ";
+	std::string key;
+	int value;
+	std::cin >> key >> value;
+	int8_t value8 = (int8_t) value;
+	if (key == "vel_x") {
+		serial.get_tx_packet()->set_vel_x(value8);
+		std::cout << "Setting vel_x =" << value << std::endl;
+	} else if (key == "vel_y") {
+		serial.get_tx_packet()->set_vel_y(value8);
+		std::cout << "Setting vel_y = " << value << std::endl;
+	} else if (key == "vel_z") {
+		serial.get_tx_packet()->set_vel_z(value8);
+		std::cout << "Setting vel_z = " << value << std::endl;
+	} else if (key == "sleep") {
+		std::cout << "Sleeping for " << value << " ms" <<
+			std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(value));
+	} else
+		std::cout << key << ": command not found" << std::endl;
 }

@@ -25,9 +25,15 @@
 
 class Robot {
  public:
-	void start();
+	Robot();
+	void set_period(int new_period);
+	void autonomous_init();
+	void teleop_init();
  private:
-	 Serial serial;
+	void autonomous_periodic();
+	void teleop_periodic();
+	Serial serial;
+	int period;
 };
 
 #endif				// Robot_hpp

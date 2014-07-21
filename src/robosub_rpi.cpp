@@ -19,11 +19,16 @@
    <http://www.gnu.org/licenses/>. */
 
 #include <stdlib.h>
+#include "CliOptions.hpp"
 #include "Robot.hpp"
 
 int main(int argc, char *argv[])
 {
+	CliOptions opts = CliOptions(argc, argv);
 	Robot robot;
-	robot.start();
+	if (opts.is_interactive())
+		robot.teleop_init();
+	else
+		robot.autonomous_init();
 	return EXIT_SUCCESS;
 }
