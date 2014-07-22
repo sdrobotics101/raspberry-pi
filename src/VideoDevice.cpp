@@ -24,26 +24,19 @@
 #include <opencv2/opencv.hpp>
 #include "VideoDevice.hpp"
 
-VideoDevice::VideoDevice()
+VideoDevice::VideoDevice(int input_device_id) : BaseVideoDevice()
 {
-	is_finished = false;
-	is_ready = false;
+	device_id = input_device_id;
 }
 
-void VideoDevice::start_capture(int device_id)
+void VideoDevice::start()
 {
-	init_camera(device_id);
+	init_camera();
 	capture_thread =
 	    new std::thread(&VideoDevice::capture_from_camera, this);
 }
 
-cv::Mat VideoDevice::get_image()
-{
-	while (!is_ready) ;
-	return image;
-}
-
-void VideoDevice::init_camera(int device_id)
+void VideoDevice::init_camera()
 {
 	camera.open(device_id);
 	if (!camera.isOpened()) {

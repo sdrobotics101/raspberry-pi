@@ -1,4 +1,4 @@
-/* VideoDevice.hpp -- Header file for VideoDevice class
+/* BaseVideoDevice.cpp -- Implementation of BaseVideoDevice class
 
    Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
@@ -18,23 +18,17 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef VideoDevice_hpp
-#define VideoDevice_hpp
-
-#include <thread>
 #include <opencv2/opencv.hpp>
 #include "BaseVideoDevice.hpp"
 
-class VideoDevice : public BaseVideoDevice {
- public:
-	VideoDevice(int input_device_id);
-	virtual void start();
-	~VideoDevice();
- private:
-	virtual void init_camera();
-	virtual void capture_from_camera();
-	cv::VideoCapture camera;
-	int device_id;
-};
+BaseVideoDevice::BaseVideoDevice()
+{
+	is_finished = false;
+	is_ready = false;
+}
 
-#endif				// VideoDevice_hpp
+cv::Mat BaseVideoDevice::get_image()
+{
+	while (!is_ready);
+	return image;
+}
