@@ -55,7 +55,7 @@ void trackbar_callback(int param, void *obj)
 	   std::vector < std::vector < cv::Point > >contours;
 	   cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
 	   // This is for contour display
-	   /*for (uint i = 0; i < contours.size(); i++) {
+	   for (uint i = 0; i < contours.size(); i++) {
 	   cv::Scalar color(0, 0, 0);
 	   cv::drawContours(input, contours, i, color, 1, 8);
 	   }
