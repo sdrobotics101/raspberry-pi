@@ -48,8 +48,8 @@ ContourDetector::Params::Params()
 	filter_with_blur = true;
 }
 
-ContourDetector::ContourDetector(const ContourDetector::
-				 Params & parameters):params(parameters)
+ContourDetector::
+ContourDetector(const ContourDetector::Params & parameters):params(parameters)
 {
 }
 
@@ -113,8 +113,8 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 			if (all_contours.at(i).get_area() > params.min_area
 			    && area_filtered_contours.at(i).get_area() <
 			    params.max_area)
-				area_filtered_contours.push_back(all_contours.
-								 at(i));
+				area_filtered_contours.
+				    push_back(all_contours.at(i));
 		}
 	} else
 		area_filtered_contours = all_contours;
