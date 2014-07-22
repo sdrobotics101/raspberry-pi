@@ -28,31 +28,31 @@ void trackbar_callback(int param, void *obj)
 	thresholded = hsv_thresh_hue_lower & hsv_thresh_hue_upper;
 	cv::imshow(window, thresholded);
 	/*cv::Mat gray0;
-	thresholded.copyTo(gray0);
-	cv::Mat gray;
-	cv::Canny(gray0, gray, 0, canny_threshold, 5);
-	cv::dilate(gray, gray, cv::Mat(), cv::Point(-1, -1));
-	std::vector < std::vector < cv::Point > >contours;
-	cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-	// This is for contour display
-	/*for (uint i = 0; i < contours.size(); i++) {
-		cv::Scalar color(0, 0, 0);
-		cv::drawContours(input, contours, i, color, 1, 8);
-		}
+	   thresholded.copyTo(gray0);
+	   cv::Mat gray;
+	   cv::Canny(gray0, gray, 0, canny_threshold, 5);
+	   cv::dilate(gray, gray, cv::Mat(), cv::Point(-1, -1));
+	   std::vector < std::vector < cv::Point > >contours;
+	   cv::findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+	   // This is for contour display
+	   /*for (uint i = 0; i < contours.size(); i++) {
+	   cv::Scalar color(0, 0, 0);
+	   cv::drawContours(input, contours, i, color, 1, 8);
+	   }
 
-	// This is for bounding rectangle displaye
-	std::vector<cv::RotatedRect> boundingRects;
-	for (uint i = 0; i < contours.size(); i++)
-		boundingRects.push_back(cv::minAreaRect(contours.at(i)));
-	for (uint i = 0; i < contours.size(); i++)
-	{
-		cv::Point2f boundingPoints[4];
-		boundingRects.at(i).points(boundingPoints);
-		for (int i = 0; i < 4; i++)
-			cv::line(input, boundingPoints[i], boundingPoints[(i + 1) % 4], cv::Scalar(0, 0, 0));
-	}
+	   // This is for bounding rectangle displaye
+	   std::vector<cv::RotatedRect> boundingRects;
+	   for (uint i = 0; i < contours.size(); i++)
+	   boundingRects.push_back(cv::minAreaRect(contours.at(i)));
+	   for (uint i = 0; i < contours.size(); i++)
+	   {
+	   cv::Point2f boundingPoints[4];
+	   boundingRects.at(i).points(boundingPoints);
+	   for (int i = 0; i < 4; i++)
+	   cv::line(input, boundingPoints[i], boundingPoints[(i + 1) % 4], cv::Scalar(0, 0, 0));
+	   }
 
-	cv::imshow(window, input);*/
+	   cv::imshow(window, input); */
 }
 
 int main(int argc, char *argv[])
@@ -72,8 +72,7 @@ int main(int argc, char *argv[])
 	cv::createTrackbar(canny_trackbar, window, &canny_threshold, 255,
 			   trackbar_callback);
 	cv::imshow(window, raw_image);
-	while (true)
-	{
+	while (true) {
 		cv::waitKey(0);
 	}
 
