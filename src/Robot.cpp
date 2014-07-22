@@ -38,24 +38,34 @@ void Robot::set_period(int new_period)
 	period = new_period;
 }
 
-void Robot::autonomous_init()
+void Robot::autonomous_mode()
 {
+	autonomous_init();
 	while (true) {
 		autonomous_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
-	}
+	}	
+}
+
+void Robot::autonomous_init()
+{
 }
 
 void Robot::autonomous_periodic()
 {
 }
 
-void Robot::teleop_init()
+void Robot::teleop_mode()
 {
+	teleop_init();
 	while (true) {
 		teleop_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
 	}
+}
+
+void Robot::teleop_init()
+{
 }
 
 void Robot::teleop_periodic()

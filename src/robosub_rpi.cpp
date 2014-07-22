@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
 	CliOptions opts = CliOptions(argc, argv);
 	Robot robot;
 	if (opts.is_interactive())
-		robot.teleop_init();
+		robot.teleop_mode();
 	else
-		robot.autonomous_init();
+		robot.autonomous_mode();
 	return EXIT_SUCCESS;
 }

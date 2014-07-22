@@ -27,9 +27,11 @@ class Robot {
  public:
 	Robot();
 	void set_period(int new_period);
+	void autonomous_mode();
+	void teleop_mode();
+ private:
 	void autonomous_init();
 	void teleop_init();
- private:
 	void autonomous_periodic();
 	void teleop_periodic();
 	Serial serial;
