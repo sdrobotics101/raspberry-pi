@@ -44,7 +44,7 @@ void Robot::autonomous_mode()
 	while (true) {
 		autonomous_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
-	}	
+	}
 }
 
 void Robot::autonomous_init()

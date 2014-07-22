@@ -28,12 +28,12 @@ class BaseVideoDevice {
  public:
 	BaseVideoDevice();
 	virtual void start() = 0;
-	cv::Mat get_image();
+	 cv::Mat get_image();
  protected:
-	virtual void init_camera() = 0;
+	 virtual void init_camera() = 0;
 	virtual void capture_from_camera() = 0;
-	std::thread * capture_thread;
-	cv::Mat image;
+	 std::thread * capture_thread;
+	 cv::Mat image;
 	bool is_finished;
 	bool is_ready;
 };

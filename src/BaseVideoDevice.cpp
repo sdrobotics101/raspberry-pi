@@ -29,6 +29,6 @@ BaseVideoDevice::BaseVideoDevice()
 
 cv::Mat BaseVideoDevice::get_image()
 {
-	while (!is_ready);
+	while (!is_ready) ;
 	return image;
 }

@@ -1,4 +1,4 @@
-/* VideoDevice.cpp -- Implementation of VideoDevice class
+/* USBVideoDevice.hpp -- Header file for USBVideoDevice class
 
    Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
@@ -18,45 +18,23 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#include <cstdlib>
-#include <iostream>
+#ifndef USBVideoDevice_hpp
+#define USBVideoDevice_hpp
+
 #include <thread>
 #include <opencv2/opencv.hpp>
-#include "VideoDevice.hpp"
+#include "BaseVideoDevice.hpp"
 
-VideoDevice::VideoDevice(int input_device_id) : BaseVideoDevice()
-{
-	device_id = input_device_id;
-}
+class USBVideoDevice:public BaseVideoDevice {
+ public:
+	USBVideoDevice(int input_device_id);
+	virtual void start();
+	~USBVideoDevice();
+ private:
+	 virtual void init_camera();
+	virtual void capture_from_camera();
+	 cv::VideoCapture camera;
+	int device_id;
+};
 
-void VideoDevice::start()
-{
-	init_camera();
-	capture_thread =
-	    new std::thread(&VideoDevice::capture_from_camera, this);
-}
-
-void VideoDevice::init_camera()
-{
-	camera.open(device_id);
-	if (!camera.isOpened()) {
-		std::cerr << "Unable to open capture device /dev/video" <<
-		    device_id << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
-
-void VideoDevice::capture_from_camera()
-{
-	while (!is_finished) {
-		camera >> image;
-		is_ready = true;
-	}
-}
-
-VideoDevice::~VideoDevice()
-{
-	is_finished = true;
-	capture_thread->join();
-	delete capture_thread;
-}
+#endif				// USBVideoDevice_hpp
