@@ -73,7 +73,7 @@ void Robot::teleop_init()
 	int_base = "dec";
 	std::cout << "Cubeception Helm" << std::endl;
 	std::cout << "Type \"help\" for help with commands" << std::
-	    endl << std::endl;;
+		endl << std::endl;
 }
 
 void Robot::teleop_periodic()
