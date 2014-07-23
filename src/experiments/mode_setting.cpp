@@ -1,4 +1,4 @@
-/* Robot.hpp -- Header file for Robot class
+/* mode_setting.cpp -- Experiment which manipulates individual bits
 
    Copyright (C) 2014 Tushar Pankaj
    
@@ -18,26 +18,19 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef Robot_hpp
-#define Robot_hpp
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <bitset>
+#include <iostream>
 
-#include <string>
-#include "Serial.hpp"
-
-class Robot {
- public:
-	Robot();
-	void set_period(int new_period);
-	void autonomous_mode();
-	void teleop_mode();
- private:
-	void autonomous_init();
-	void teleop_init();
-	void autonomous_periodic();
-	void teleop_periodic();
-	Serial serial;
-	int period;
-	std::string int_base;
-};
-
-#endif				// Robot_hpp
+int main(int argc, char *argv[])
+{
+	std::bitset<8> mode;
+	mode[5] = 1;
+	mode[2] = 1;
+	mode[0] = 1;
+	uint8_t mode8 = mode.to_ulong();
+	printf("%d", mode8);
+	return EXIT_SUCCESS;
+}

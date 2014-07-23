@@ -22,6 +22,7 @@
 #include <thread>
 #include <chrono>
 #include <string>
+#include <sstream>
 #include "Robot.hpp"
 #include "Serial.hpp"
 #include "TXPacket.hpp"
@@ -66,27 +67,71 @@ void Robot::teleop_mode()
 
 void Robot::teleop_init()
 {
+	int_base = "dec";
+	std::cout << "Cubeception Helm" << std::endl;
+	std::cout << "Type \"help\" for help with commands" << std::endl << std::endl;;
 }
 
 void Robot::teleop_periodic()
 {
 	std::cout << "cubeception> ";
-	std::string key;
-	int value;
-	std::cin >> key >> value;
-	int8_t value8 = (int8_t) value;
-	if (key == "vel_x") {
-		serial.get_tx_packet()->set_vel_x(value8);
-		std::cout << "Setting vel_x =" << value << std::endl;
-	} else if (key == "vel_y") {
-		serial.get_tx_packet()->set_vel_y(value8);
-		std::cout << "Setting vel_y = " << value << std::endl;
-	} else if (key == "vel_z") {
-		serial.get_tx_packet()->set_vel_z(value8);
-		std::cout << "Setting vel_z = " << value << std::endl;
-	} else if (key == "sleep") {
-		std::cout << "Sleeping for " << value << " ms" << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(value));
-	} else
-		std::cout << key << ": command not found" << std::endl;
+	std::string input;
+	std::getline(std::cin, input);
+	if (input.find(" ") == std::string::npos)
+	{
+		if (input == "dec") {
+			std::cin >> std::dec;
+			std::cout << std::dec;
+			int_base = "dec";
+			std::cout << "Set base to decimal" << std::endl;
+		} else if (input == "hex") {
+			std::cin >> std::hex;
+			std::cout << std::hex;
+			int_base = "hex";
+			std::cout << "Set base to hex" << std::endl;
+		} else if (input == "oct") {
+			std::cin >> std::oct;
+			std::cout << std::oct;
+			int_base = "oct";
+			std::cout << "Set base to octal" << std::endl;
+		} else if (input == "help") {
+			std::cout << "Available commands:" << std::endl;
+			std::cout << "Format: COMMAND [DATA TYPE] -- description" << std::endl << std::endl;
+			std::cout << " vel_x INT8_T -- set linear velocity along x-axis" << std::endl;
+			std::cout << " vel_y INT8_T -- set linear velocity along y-axis" << std::endl;
+			std::cout << " vel_z INT8_T -- set linear velocity along z-axis" << std::endl;
+			std::cout << "sleep INT32_T -- sleep for given number of milliseconds" << std::endl;
+			std::cout << "          dec -- set integer base to decimal" << std::endl;
+			std::cout << "          hex -- set integer base to hex" << std::endl;
+			std::cout << "          oct -- set integer base to octal" << std::endl;
+			std::cout << "         help -- show this help" << std::endl;
+		} else
+			std::cout << input << ": command not found" << std::endl;
+	}
+	else
+	{
+		std::string key;
+		int value;
+		if (int_base == "dec")
+			std::istringstream(input) >> key >> value;
+		else if (int_base == "hex")
+			std::istringstream(input) >> std::hex >> key >> value;
+		else if (int_base == "oct")
+			std::istringstream(input) >> std::oct >> key >> value;			
+		int8_t value8 = (int8_t) value;
+		if (key == "vel_x") {
+			serial.get_tx_packet()->set_vel_x(value8);
+			std::cout << "Set vel_x = " << value << std::endl;
+		} else if (key == "vel_y") {
+			serial.get_tx_packet()->set_vel_y(value8);
+			std::cout << "Set vel_y = " << value << std::endl;
+		} else if (key == "vel_z") {
+			serial.get_tx_packet()->set_vel_z(value8);
+			std::cout << "Set vel_z = " << value << std::endl;
+		} else if (key == "sleep") {
+			std::cout << "Sleeping for " << value << " ms" << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(value));
+		} else
+			std::cout << key << ": command not found" << std::endl;
+	}
 }

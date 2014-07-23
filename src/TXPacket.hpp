@@ -62,7 +62,7 @@ class TXPacket {
 		int16_t pos_z;
 		int8_t torpedo_ctl;
 		int8_t servo_ctl[6];
-		int8_t spare;
+		uint8_t spare;
 		uint16_t checksum;
 	} __attribute__ ((__packed__)) tx_packet_t;
 	int servo_ctl_length;

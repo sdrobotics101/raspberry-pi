@@ -38,7 +38,7 @@ TXPacket::TXPacket()
 	servo_ctl_length = 6;
 	for (int i = 0; i < servo_ctl_length; i++)
 		tx_packet.servo_ctl[i] = 0;
-	tx_packet.spare = 0;
+	tx_packet.spare = 1;
 	tx_packet.checksum = compute_checksum();
 	is_valid = false;
 }
