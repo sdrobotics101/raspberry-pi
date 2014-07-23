@@ -19,6 +19,7 @@
    <http://www.gnu.org/licenses/>. */
 
 #include <mutex>
+#include <bitset>
 #include <string.h>
 #include "TXPacket.hpp"
 
@@ -30,17 +31,19 @@ TXPacket::TXPacket()
 	tx_packet.vel_x = 0;
 	tx_packet.vel_y = 0;
 	tx_packet.vel_z = 0;
-	tx_packet.rot_x = 0;
-	tx_packet.rot_y = 0;
 	tx_packet.rot_z = 0;
-	tx_packet.pos_z = 0;
 	tx_packet.torpedo_ctl = 0;
-	servo_ctl_length = 6;
-	for (int i = 0; i < servo_ctl_length; i++)
-		tx_packet.servo_ctl[i] = 0;
-	tx_packet.spare = 1;
+	tx_packet.servo_ctl = 0;
+	tx_packet.led_ctl = 0;
+	tx_packet.mode = 0x1;
 	tx_packet.checksum = compute_checksum();
 	is_valid = false;
+}
+
+uint16_t TXPacket::get_header()
+{
+	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
+	return tx_packet.header;
 }
 
 void TXPacket::set_vel_x(int8_t vel_x)
@@ -79,30 +82,6 @@ int8_t TXPacket::get_vel_z()
 	return tx_packet.vel_z;
 }
 
-void TXPacket::set_rot_x(int8_t rot_x)
-{
-	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	tx_packet.rot_x = rot_x;
-}
-
-int8_t TXPacket::get_rot_x()
-{
-	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return tx_packet.rot_x;
-}
-
-void TXPacket::set_rot_y(int8_t rot_y)
-{
-	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	tx_packet.rot_y = rot_y;
-}
-
-int8_t TXPacket::get_rot_y()
-{
-	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return tx_packet.rot_y;
-}
-
 void TXPacket::set_rot_z(int8_t rot_z)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
@@ -115,40 +94,52 @@ int8_t TXPacket::get_rot_z()
 	return tx_packet.rot_z;
 }
 
-void TXPacket::set_pos_z(int16_t pos_z)
+void TXPacket::set_torpedo_ctl(std::bitset<8> torpedo_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	tx_packet.pos_z = pos_z;
+	tx_packet.torpedo_ctl = torpedo_ctl.to_ulong();
 }
 
-int16_t TXPacket::get_pos_z()
+std::bitset<8> TXPacket::get_torpedo_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return tx_packet.pos_z;
+	return std::bitset<8>(tx_packet.torpedo_ctl);
 }
 
-void TXPacket::set_torpedo_ctl(int8_t torpedo_ctl)
+void TXPacket::set_servo_ctl(std::bitset<8> servo_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	tx_packet.torpedo_ctl = torpedo_ctl;
+	tx_packet.servo_ctl = servo_ctl.to_ulong();
 }
 
-int8_t TXPacket::get_torpedo_ctl()
+std::bitset<8> TXPacket::get_servo_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return tx_packet.torpedo_ctl;
+	return std::bitset<8>(tx_packet.servo_ctl);
 }
 
-void TXPacket::set_servo_ctl(int8_t servo_ctl[])
+void TXPacket::set_led_ctl(std::bitset<8> led_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	memcpy(&tx_packet.servo_ctl, servo_ctl, sizeof(tx_packet.servo_ctl));
+	tx_packet.led_ctl = led_ctl.to_ulong();
 }
 
-void TXPacket::get_servo_ctl(int8_t servo_ctl[])
+std::bitset<8> TXPacket::get_led_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	memcpy(&servo_ctl, tx_packet.servo_ctl, sizeof(servo_ctl));
+	return std::bitset<8>(tx_packet.led_ctl);
+}
+
+void TXPacket::set_mode(std::bitset<16> mode)
+{
+	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
+	tx_packet.mode = mode.to_ulong();
+}
+
+std::bitset<16> TXPacket::get_mode()
+{
+	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
+	return std::bitset<16>(tx_packet.mode);
 }
 
 size_t TXPacket::size()
