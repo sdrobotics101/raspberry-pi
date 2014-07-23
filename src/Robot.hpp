@@ -37,7 +37,8 @@ class Robot {
 	void teleop_periodic();
 	Serial serial;
 	int period;
-	std::string int_base;
+	 std::string int_base;
+	uint8_t bat_v_threshold;
 };
 
 #endif				// Robot_hpp

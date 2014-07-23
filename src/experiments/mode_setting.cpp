@@ -26,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-	std::bitset<8> mode;
+	std::bitset < 8 > mode;
 	mode[5] = 1;
 	mode[2] = 1;
 	mode[0] = 1;

@@ -94,52 +94,52 @@ int8_t TXPacket::get_rot_z()
 	return tx_packet.rot_z;
 }
 
-void TXPacket::set_torpedo_ctl(std::bitset<8> torpedo_ctl)
+void TXPacket::set_torpedo_ctl(std::bitset < 8 > torpedo_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
 	tx_packet.torpedo_ctl = torpedo_ctl.to_ulong();
 }
 
-std::bitset<8> TXPacket::get_torpedo_ctl()
+std::bitset < 8 > TXPacket::get_torpedo_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return std::bitset<8>(tx_packet.torpedo_ctl);
+	return std::bitset < 8 > (tx_packet.torpedo_ctl);
 }
 
-void TXPacket::set_servo_ctl(std::bitset<8> servo_ctl)
+void TXPacket::set_servo_ctl(std::bitset < 8 > servo_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
 	tx_packet.servo_ctl = servo_ctl.to_ulong();
 }
 
-std::bitset<8> TXPacket::get_servo_ctl()
+std::bitset < 8 > TXPacket::get_servo_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return std::bitset<8>(tx_packet.servo_ctl);
+	return std::bitset < 8 > (tx_packet.servo_ctl);
 }
 
-void TXPacket::set_led_ctl(std::bitset<8> led_ctl)
+void TXPacket::set_led_ctl(std::bitset < 8 > led_ctl)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
 	tx_packet.led_ctl = led_ctl.to_ulong();
 }
 
-std::bitset<8> TXPacket::get_led_ctl()
+std::bitset < 8 > TXPacket::get_led_ctl()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return std::bitset<8>(tx_packet.led_ctl);
+	return std::bitset < 8 > (tx_packet.led_ctl);
 }
 
-void TXPacket::set_mode(std::bitset<16> mode)
+void TXPacket::set_mode(std::bitset < 16 > mode)
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
 	tx_packet.mode = mode.to_ulong();
 }
 
-std::bitset<16> TXPacket::get_mode()
+std::bitset < 16 > TXPacket::get_mode()
 {
 	std::lock_guard < std::mutex > tx_packet_lock(tx_packet_mtx);
-	return std::bitset<16>(tx_packet.mode);
+	return std::bitset < 16 > (tx_packet.mode);
 }
 
 size_t TXPacket::size()
