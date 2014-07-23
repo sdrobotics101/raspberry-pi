@@ -23,6 +23,7 @@
 
 #include <string>
 #include <vector>
+#include <opencv2/opencv.hpp>
 #include "Robot.hpp"
 #include "Contour.hpp"
 #include "Rectangle.hpp"
@@ -38,6 +39,7 @@ class StartingGateMission:public Mission {
 	std::vector<Rectangle> contours_to_rectangles(std::vector<Contour> contours);
 	std::vector<Rectangle> filter_rectangles(std::vector<Contour> detected_contours);
 	std::vector<cv::Point2f> find_centroids(std::vector<Rectangle> rectangles);
+	cv::Point2f find_angular_displacement(std::vector<cv::Point2f> centroids);
 	std::string mission_name;
 	Robot *robot;
 };

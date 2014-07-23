@@ -22,7 +22,7 @@
 #include <opencv2/opencv.hpp>
 #include "Circle.hpp"
 
- Circle::Circle(std::vector < cv::Point2d > points):Contour(points)
+ Circle::Circle(std::vector < cv::Point > points):Contour(points)
 {
 	cv::Point2f center_tmp;
 	float radius_tmp;

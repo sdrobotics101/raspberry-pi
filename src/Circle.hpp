@@ -27,7 +27,7 @@
 
 class Circle:public Contour {
  public:
-	Circle(std::vector < cv::Point2d > points);
+	Circle(std::vector < cv::Point > points);
 	cv::Point2d get_center();
 	double get_radius();
 	double get_area_ratio();

@@ -27,11 +27,11 @@
 class Contour {
  public:
 	Contour();
-	Contour(std::vector < cv::Point2d > points);
-	std::vector < cv::Point2d > get_points();
+	Contour(std::vector < cv::Point > points);
+	std::vector < cv::Point > get_points();
 	double get_area();
  protected:
-	 std::vector < cv::Point2d > contour;
+	 std::vector < cv::Point > contour;
 	double area;
 };
 

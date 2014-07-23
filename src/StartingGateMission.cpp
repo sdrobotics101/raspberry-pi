@@ -43,13 +43,26 @@ void StartingGateMission::run()
 	detector_params.filter_by_hue = true;
 	detector_params.min_hue = 100;
 	detector_params.max_hue = 150;
-	detector_params.max_canny = 0;
+	detector_params.max_canny = 50;
 	detector_params.filter_with_blur = false;
 	ContourDetector detector(detector_params);
-	std::vector<Rectangle> filtered_rectangles = filter_rectangles(detector.detect(image));
+	std::vector<Contour> contours = detector.detect(image);
+	if (contours.empty())
+		return;
+	std::cout << "contours.size() = " << contours.size() << std::endl;
+	std::vector<Rectangle> filtered_rectangles = filter_rectangles(contours);
+	if (filtered_rectangles.empty())
+		return;
 	std::vector<cv::Point2f> centroids = find_centroids(filtered_rectangles);
-	for (uint i = 0; i < centroids.size(); i++)
+	for (uint i = 0; i < centroids.size(); i++) {
 		std::cout << "Centroid " << i << ": " << centroids.at(i) << std::endl;
+		cv::circle(image, centroids.at(i), 5, cv::Scalar(0, 0, 0));
+	}
+	cv::Point2f average = find_angular_displacement(centroids);
+	cv::circle(image, average, 5, cv::Scalar(0, 0, 0));
+	cv::namedWindow("Image", 0);
+	cv::imshow("Image", image);
+	cv::waitKey();
 }
 
 std::vector<Circle> StartingGateMission::contours_to_circles(std::vector<Contour> contours)
@@ -77,6 +90,10 @@ std::vector<Rectangle> StartingGateMission::filter_rectangles(std::vector<Contou
 	{
 		if (detected_bounding_rectangles.at(i).get_area_ratio() < detected_enclosing_circles.at(i).get_area_ratio() && detected_bounding_rectangles.at(i).get_aspect_ratio() < 0.2)
 			filtered_rectangles.push_back(detected_bounding_rectangles.at(i));
+		std::cout << "Rectangle " << i << ": ";
+		for (uint j = 0; j < detected_bounding_rectangles.at(i).get_points().size(); j++)
+			std::cout << detected_bounding_rectangles.at(i).get_points().at(j) << " ";
+		std::cout << "Area: " << detected_contours.at(i).get_area() << ", Rectangle Area Ratio: " << detected_bounding_rectangles.at(i).get_area_ratio() << ", Circle Area Ratio: " << detected_enclosing_circles.at(i).get_area_ratio() << ", Aspect Ratio: " << detected_bounding_rectangles.at(i).get_aspect_ratio() << ", Angle: " << detected_bounding_rectangles.at(i).get_angle() << std::endl;
 	}
 	return filtered_rectangles;
 }
@@ -84,18 +101,35 @@ std::vector<Rectangle> StartingGateMission::filter_rectangles(std::vector<Contou
 std::vector<cv::Point2f> StartingGateMission::find_centroids(std::vector<Rectangle> rectangles)
 {
 	cv::Mat data = cv::Mat::zeros(rectangles.size(), 2, CV_32F);
+	std::cout << data;
 	for (uint i = 0; i < rectangles.size(); i++)
 	{
 		data.at<float>(i, 0) = rectangles.at(i).get_center().x;
 		data.at<float>(i, 1) = rectangles.at(i).get_center().y;
 	}
-	std::cout << data;
+	std::cout << "Rectangles size: " << rectangles.size() << std::endl;
+	std::cout << data << std::endl;
 	int K = 2;
 	cv::Mat best_labels;
 	cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT, 10, 1.0);
 	int attempts = 3;
 	int flags = cv::KMEANS_PP_CENTERS;
-	std::vector<cv::Point2f> centers;
-	//cv::kmeans(data, K, best_labels, criteria, attempts, flags, centers);
-	return centers;	
+	cv::Mat centroids;
+	cv::kmeans(data, K, best_labels, criteria, attempts, flags, centroids);
+	std::cout << centroids << std::endl;
+	std::vector<cv::Point2f> centroids_vector;
+	for (int i = 0; i < centroids.rows; i++)
+		centroids_vector.push_back(cv::Point2f(centroids.at<float>(i, 0), centroids.at<float>(i, 1)));
+	return centroids_vector;
+}
+
+cv::Point2f StartingGateMission::find_angular_displacement(std::vector<cv::Point2f> centroids)
+{
+	cv::Point2f centroids_average = cv::Point2f(0.0, 0.0);
+	for (uint i = 0; i < centroids.size(); i++)
+		centroids_average += centroids.at(i);
+	centroids_average.x /= centroids.size();
+	centroids_average.y /= centroids.size();
+	std::cout << "Centroids average: " << centroids_average << std::endl;
+	return centroids_average;
 }

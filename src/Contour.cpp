@@ -26,13 +26,13 @@ Contour::Contour()
 {
 }
 
-Contour::Contour(std::vector < cv::Point2d > points)
+Contour::Contour(std::vector < cv::Point > points)
 {
 	contour = points;
 	area = cv::contourArea(contour);
 }
 
-std::vector < cv::Point2d > Contour::get_points()
+std::vector < cv::Point > Contour::get_points()
 {
 	return contour;
 }

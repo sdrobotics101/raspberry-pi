@@ -27,7 +27,7 @@
 
 class Rectangle:public Contour {
  public:
-	Rectangle(std::vector < cv::Point2d > points);
+	Rectangle(std::vector < cv::Point > points);
 	cv::Point2f get_center();
 	double get_width();
 	double get_height();
