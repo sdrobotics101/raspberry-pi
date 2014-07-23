@@ -32,3 +32,8 @@ cv::Mat BaseVideoDevice::get_image()
 	while (!is_ready) ;
 	return image;
 }
+
+double BaseVideoDevice::pixels_to_angle(double pixels)
+{
+	return pixels;
+}
