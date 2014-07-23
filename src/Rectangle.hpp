@@ -33,12 +33,12 @@ class Rectangle:public Contour {
 	double get_height();
 	double get_aspect_ratio();
 	double get_angle();
-	double get_log_area_ratio();
+	double get_area_ratio();
  protected:
 	 cv::RotatedRect rectangle;
 	double aspect_ratio;
 	double angle;
-	double log_area_ratio;
+	double area_ratio;
 };
 
 #endif				// Rectangle_hpp

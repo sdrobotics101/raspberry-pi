@@ -30,11 +30,11 @@ class Circle:public Contour {
 	Circle(std::vector < cv::Point2d > points);
 	cv::Point2d get_center();
 	double get_radius();
-	double get_log_area_ratio();
+	double get_area_ratio();
  protected:
 	 cv::Point2d center;
 	double radius;
-	double log_area_ratio;
+	double area_ratio;
 };
 
 #endif				// Circle_hpp

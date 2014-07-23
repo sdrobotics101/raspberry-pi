@@ -25,12 +25,13 @@
 #include "Robot.hpp"
 #include "Serial.hpp"
 #include "TXPacket.hpp"
+#include "StartingGateMission.hpp"
 
 Robot::Robot()
 {
 	period = 10;
-	serial.open_serial();
-	serial.start();
+	//serial.open_serial();
+	//serial.start();
 }
 
 void Robot::set_period(int new_period)
@@ -49,6 +50,8 @@ void Robot::autonomous_mode()
 
 void Robot::autonomous_init()
 {
+	StartingGateMission starting_gate_mission = StartingGateMission(this);
+	starting_gate_mission.run();
 }
 
 void Robot::autonomous_periodic()

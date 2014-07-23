@@ -22,7 +22,11 @@
 #define StartingGateMission_hpp
 
 #include <string>
+#include <vector>
 #include "Robot.hpp"
+#include "Contour.hpp"
+#include "Rectangle.hpp"
+#include "Circle.hpp"
 #include "Mission.hpp"
 
 class StartingGateMission:public Mission {
@@ -30,7 +34,11 @@ class StartingGateMission:public Mission {
 	StartingGateMission(Robot * robot_ptr);
 	virtual void run();
  protected:
-	 std::string mission_name;
+	std::vector<Circle> contours_to_circles(std::vector<Contour> contours);
+	std::vector<Rectangle> contours_to_rectangles(std::vector<Contour> contours);
+	std::vector<Rectangle> filter_rectangles(std::vector<Contour> detected_contours);
+	std::vector<cv::Point2f> find_centroids(std::vector<Rectangle> rectangles);
+	std::string mission_name;
 	Robot *robot;
 };
 

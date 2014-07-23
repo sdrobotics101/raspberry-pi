@@ -18,7 +18,6 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#include <math.h>
 #include <opencv2/opencv.hpp>
 #include "Rectangle.hpp"
 
@@ -26,8 +25,9 @@ Rectangle::Rectangle(std::vector < cv::Point2d > points)
 {
 	rectangle = cv::minAreaRect(points);
 	aspect_ratio = (double)get_width() / (double)get_height();
+	angle = (double)rectangle.angle;
 	area = (double)get_width() * (double)get_height();
-	log_area_ratio = log(area / cv::contourArea(points));
+	area_ratio = area / cv::contourArea(points);
 	cv::Point2f pts[4];
 	rectangle.points(pts);
 	for (int i = 0; i < 4; i++)
@@ -56,5 +56,10 @@ double Rectangle::get_aspect_ratio()
 
 double Rectangle::get_angle()
 {
-	return (double)angle;
+	return angle;
+}
+
+double Rectangle::get_area_ratio()
+{
+	return area_ratio;
 }

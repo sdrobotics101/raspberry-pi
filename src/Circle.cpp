@@ -30,7 +30,7 @@
 	center = center_tmp;
 	radius = radius_tmp;
 	area = M_PI * pow(radius, 2);
-	log_area_ratio = log(area / cv::contourArea(contour));
+	area_ratio = area / cv::contourArea(contour);
 }
 
 cv::Point2d Circle::get_center()
@@ -41,4 +41,9 @@ cv::Point2d Circle::get_center()
 double Circle::get_radius()
 {
 	return radius;
+}
+
+double Circle::get_area_ratio()
+{
+	return area_ratio;
 }
