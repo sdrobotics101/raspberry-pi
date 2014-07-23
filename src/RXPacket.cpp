@@ -28,106 +28,92 @@ RXPacket::RXPacket()
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	rx_packet_size = sizeof(rx_packet_t);
 	rx_packet.header = 0x1d3b;
-	rx_packet.acc_x = 0;
-	rx_packet.acc_y = 0;
-	rx_packet.acc_z = 0;
 	rx_packet.mag_x = 0;
 	rx_packet.mag_y = 0;
 	rx_packet.mag_z = 0;
-	rx_packet.depth = 0;
-	rx_packet.spare = 0;
+	rx_packet.pos_z = 0;
+	rx_packet.health = 0;
+	rx_packet.bat_v = 0;
 	rx_packet.checksum = compute_checksum();
 	is_valid = false;
 }
 
-int16_t RXPacket::get_header()
+uint16_t RXPacket::get_header()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	return rx_packet.header;
 }
 
-void RXPacket::set_acc_x(int8_t acc_x)
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	rx_packet.acc_x = acc_x;
-}
-
-int8_t RXPacket::get_acc_x()
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return rx_packet.acc_x;
-}
-
-void RXPacket::set_acc_y(int8_t acc_y)
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	rx_packet.acc_y = acc_y;
-}
-
-int8_t RXPacket::get_acc_y()
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return rx_packet.acc_y;
-}
-
-void RXPacket::set_acc_z(int8_t acc_z)
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	rx_packet.acc_z = acc_z;
-}
-
-int8_t RXPacket::get_acc_z()
-{
-	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return rx_packet.acc_z;
-}
-
-void RXPacket::set_mag_x(int8_t mag_x)
+void RXPacket::set_mag_x(int16_t mag_x)
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	rx_packet.mag_x = mag_x;
 }
 
-int8_t RXPacket::get_mag_x()
+int16_t RXPacket::get_mag_x()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	return rx_packet.mag_x;
 }
 
-void RXPacket::set_mag_y(int8_t mag_y)
+void RXPacket::set_mag_y(int16_t mag_y)
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	rx_packet.mag_y = mag_y;
 }
 
-int8_t RXPacket::get_mag_y()
+int16_t RXPacket::get_mag_y()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	return rx_packet.mag_y;
 }
 
-void RXPacket::set_mag_z(int8_t mag_z)
+void RXPacket::set_mag_z(int16_t mag_z)
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	rx_packet.mag_z = mag_z;
 }
 
-int8_t RXPacket::get_mag_z()
+int16_t RXPacket::get_mag_z()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
 	return rx_packet.mag_z;
 }
 
-void RXPacket::set_depth(int8_t depth)
+void RXPacket::set_pos_z(uint16_t pos_z)
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	rx_packet.depth = depth;
+	rx_packet.pos_z = pos_z;
 }
 
-int8_t RXPacket::get_depth()
+uint16_t RXPacket::get_pos_z()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return rx_packet.depth;
+	return rx_packet.pos_z;
+}
+
+void RXPacket::set_health(uint16_t health)
+{
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet.health = health;
+}
+
+uint16_t RXPacket::get_health()
+{
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	return rx_packet.health;
+}
+
+void RXPacket::set_bat_v(uint8_t bat_v)
+{
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	rx_packet.bat_v = bat_v;
+}
+
+uint8_t RXPacket::get_bat_v()
+{
+	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
+	return rx_packet.bat_v;
 }
 
 size_t RXPacket::size()

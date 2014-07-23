@@ -83,7 +83,7 @@ void Serial::run_transmit_thread()
 	is_running = true;
 	while (is_running) {
 		transmit_packet();
-		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 
