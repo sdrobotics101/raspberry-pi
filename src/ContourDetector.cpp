@@ -69,15 +69,11 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 	cv::Mat blur_out;
 	cv::Mat canny_out;
 	cv::Mat processed_img;
-	//cv::namedWindow("hsv_image.hue", 0);
-	//cv::imshow("hsv_image.hue", hsv_image.hue);
 	cv::threshold(hsv_image.hue, hue_thresholded_lower, params.min_hue, 255,
 		      CV_THRESH_BINARY);
 	cv::threshold(hsv_image.hue, hue_thresholded_upper, params.max_hue, 255,
 		      CV_THRESH_BINARY_INV);
 	hue_thresholded = hue_thresholded_lower & hue_thresholded_upper;
-	//cv::namedWindow("hue_thresholded", 0);
-	//cv::imshow("hue_thresholded", hue_thresholded);
 	cv::threshold(hsv_image.saturation, saturation_thresholded_lower,
 		      params.min_saturation, 255, CV_THRESH_BINARY);
 	cv::threshold(hsv_image.saturation, saturation_thresholded_upper,
@@ -94,8 +90,6 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 		threshold_out = threshold_out & saturation_thresholded;
 	if (params.filter_by_value)
 		threshold_out = threshold_out & value_thresholded;
-	//cv::namedWindow("threshold_out", 0);
-	//cv::imshow("threshold_out", threshold_out);
 	if (params.filter_with_blur) {
 		cv::Mat blur_tmp;
 		cv::pyrDown(threshold_out, blur_tmp,
@@ -104,20 +98,14 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 		cv::pyrUp(blur_tmp, blur_out, threshold_out.size());
 	} else
 		threshold_out.copyTo(blur_out);
-	//cv::namedWindow("blur_out", 0);
-	//cv::imshow("blur_out", blur_out);
 	if (params.filter_with_canny) {
 		cv::Canny(blur_out, canny_out, params.min_canny,
 			  params.max_canny, 5);
 		cv::dilate(canny_out, canny_out, cv::Mat(), cv::Point(-1, -1));
 	} else
 		blur_out.copyTo(canny_out);
-	//cv::namedWindow("canny_out", 0);
-	//cv::imshow("canny_out", canny_out);
-	//cv::waitKey();
 	std::vector < std::vector < cv::Point > >all_contours_raw;
 	cv::findContours(canny_out, all_contours_raw, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-	std::cout << "all_contours_raw.size() = " << all_contours_raw.size() << std::endl;
 	std::vector < Contour > all_contours;
 	for (uint i = 0; i < all_contours_raw.size(); i++)
 		all_contours.push_back(Contour(all_contours_raw.at(i)));

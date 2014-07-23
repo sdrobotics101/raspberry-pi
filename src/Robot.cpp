@@ -30,8 +30,8 @@
 Robot::Robot()
 {
 	period = 10;
-	//serial.open_serial();
-	//serial.start();
+	serial.open_serial();
+	serial.start();
 }
 
 void Robot::set_period(int new_period)
