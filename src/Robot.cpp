@@ -161,7 +161,7 @@ void Robot::teleop_periodic()
 		else if (input == "bat_v")
 			std::cout << "bat_v = " << (uint16_t) serial.
 				get_rx_packet()->get_bat_v() << std::endl;
-		else if (input == "reset") {
+		else if (input == "sreset") {
 			std::bitset<16> mode;
 			mode[15] = 1;
 			serial.get_tx_packet()->set_mode(mode);
@@ -259,6 +259,10 @@ void Robot::teleop_periodic()
 			    setw(14) << "kill  " << std::left << std::
 			    setw(8) << "        " << std::setw(0)
 			    << "kill all motors" << std::endl;
+			std::cout << std::right << std::
+			    setw(14) << "sreset  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "soft reset arduino control loops" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "dec  " << std::left << std::
 			    setw(8) << "        " << std::setw(0)
