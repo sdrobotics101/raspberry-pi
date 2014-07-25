@@ -256,6 +256,10 @@ void Robot::teleop_periodic()
 			    setw(8) << "        " << std::setw(0)
 			    << "get battery voltage" << std::endl;
 			std::cout << std::right << std::
+			    setw(14) << "kill  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "kill all motors" << std::endl;
+			std::cout << std::right << std::
 			    setw(14) << "dec  " << std::left << std::
 			    setw(8) << "        " << std::setw(0)
 			    << "set integer base to decimal" << std::endl;
