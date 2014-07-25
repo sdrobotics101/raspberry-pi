@@ -150,5 +150,5 @@ double StartingGateMission::find_angular_displacement(std::vector <
 		centroids_average += centroids.at(i);
 	centroids_average.x /= centroids.size();
 	centroids_average.y /= centroids.size();
-	return robot->get_forward_camera()->pixels_to_angle((image_center - centroids_average).x);
+	return robot->get_forward_camera()->pixels_to_angle((centroids_average = image_center).x);
 }
