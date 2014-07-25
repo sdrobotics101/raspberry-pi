@@ -345,3 +345,8 @@ Logger *Robot::get_logger()
 {
 	return &logger;
 }
+
+Serial *Robot::get_serial()
+{
+	return &serial;
+}

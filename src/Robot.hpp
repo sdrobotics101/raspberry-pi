@@ -36,6 +36,7 @@ class Robot {
 	BaseVideoDevice *get_forward_camera();
 	BaseVideoDevice *get_downward_camera();
 	Logger *get_logger();
+	Serial *get_serial();
  private:
 	void autonomous_init();
 	void teleop_init();
