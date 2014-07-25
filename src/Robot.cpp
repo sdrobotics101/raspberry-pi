@@ -106,7 +106,17 @@ void Robot::teleop_periodic()
 		else if (input == "bat_v")
 			std::cout << "bat_v = " << (uint16_t) serial.
 			    get_rx_packet()->get_bat_v() << std::endl;
-		else if (input == "dec") {
+		else if (input == "reset") {
+			std::bitset<16> mode;
+			mode[15] = 1;
+			serial.get_tx_packet()->set_mode(mode);
+			std::cout << "Set mode = " << serial.get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "kill") {
+			std::bitset<16> mode;
+			mode[14] = 1;
+			serial.get_tx_packet()->set_mode(mode);
+			std::cout << "Set mode = " << serial.get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "dec") {
 			std::cin >> std::dec;
 			std::cout << std::dec;
 			int_base = "dec";
