@@ -85,7 +85,7 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 	cv::threshold(hsv_image.value, value_thresholded_upper,
 		      params.max_value, 255, CV_THRESH_BINARY_INV);
 	value_thresholded = value_thresholded_lower & value_thresholded_upper;
-	hue_thresholded.copyTo(threshold_out);
+	threshold_out = hue_thresholded.clone();
 	if (params.filter_by_saturation)
 		threshold_out = threshold_out & saturation_thresholded;
 	if (params.filter_by_value)
@@ -97,13 +97,13 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 				     threshold_out.rows / 2));
 		cv::pyrUp(blur_tmp, blur_out, threshold_out.size());
 	} else
-		threshold_out.copyTo(blur_out);
+		blur_out = threshold_out.clone();
 	if (params.filter_with_canny) {
 		cv::Canny(blur_out, canny_out, params.min_canny,
 			  params.max_canny, 5);
 		cv::dilate(canny_out, canny_out, cv::Mat(), cv::Point(-1, -1));
 	} else
-		blur_out.copyTo(canny_out);
+		canny_out = blur_out.clone();
 	std::vector < std::vector < cv::Point > >all_contours_raw;
 	cv::findContours(canny_out, all_contours_raw, CV_RETR_LIST,
 			 CV_CHAIN_APPROX_SIMPLE);
