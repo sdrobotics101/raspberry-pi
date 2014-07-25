@@ -1,6 +1,6 @@
-/* Logger.hpp -- Header file for Logger class
+/* RPIVideoDevice.hpp -- Header file for RPIVideoDevice class
 
-   Copyright (C) 2014 Tushar Pankaj
+   Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
    This file is part of San Diego Robotics 101 Robosub.
    
@@ -18,28 +18,23 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef Logger_hpp
-#define Logger_hpp
+#ifndef RPIVideoDevice_hpp
+#define RPIVideoDevice_hpp
 
-#include <iostream>
-#include <fstream>
-#include <string>
+#include <thread>
+#include <opencv2/opencv.hpp>
+#include <raspicam/raspicam_cv.h>
+#include "BaseVideoDevice.hpp"
 
-class Logger {
+class RPIVideoDevice:public BaseVideoDevice {
  public:
-	enum LogType {
-		ERROR,
-		WARNING,
-		MESSAGE,
-		VERBOSE,
-		DEBUG
-	};
-	 Logger(std::string filename, Logger::LogType input_max_log_type);
-	~Logger();
-	void write(std::string log, Logger::LogType type);
- private:
-	 std::ofstream log_file;
-	LogType max_log_type;
+	RPIVideoDevice();
+	virtual void start();
+	 virtual ~ RPIVideoDevice();
+ protected:
+	 virtual void init_camera();
+	virtual void capture_from_camera();
+	 raspicam::RaspiCam_Cv camera;
 };
 
-#endif				// Logger_hpp
+#endif				// RPIVideoDevice_hpp

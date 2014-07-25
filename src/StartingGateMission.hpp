@@ -35,12 +35,16 @@ class StartingGateMission:public Mission {
 	StartingGateMission(Robot * robot_ptr);
 	virtual void run();
  protected:
-	std::vector<Circle> contours_to_circles(std::vector<Contour> contours);
-	std::vector<Rectangle> contours_to_rectangles(std::vector<Contour> contours);
-	std::vector<Rectangle> filter_rectangles(std::vector<Contour> detected_contours);
-	std::vector<cv::Point2f> find_centroids(std::vector<Rectangle> rectangles);
-	double find_angular_displacement(std::vector<cv::Point2f> centroids);
-	std::string mission_name;
+	 std::vector < Circle > contours_to_circles(std::vector < Contour >
+						    contours);
+	 std::vector < Rectangle > contours_to_rectangles(std::vector <
+							  Contour > contours);
+	 std::vector < Rectangle > filter_rectangles(std::vector < Contour >
+						     detected_contours);
+	 std::vector < cv::Point2f > find_centroids(std::vector < Rectangle >
+						    rectangles);
+	double find_angular_displacement(std::vector < cv::Point2f > centroids);
+	 std::string mission_name;
 	Robot *robot;
 };
 

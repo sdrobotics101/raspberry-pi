@@ -28,24 +28,76 @@
 #include "Robot.hpp"
 #include "Serial.hpp"
 #include "TXPacket.hpp"
+#include "Logger.hpp"
+#include "BaseVideoDevice.hpp"
+#include "USBVideoDevice.hpp"
+#ifdef RPI_COMPILE
+#include "RPIVideoDevice.hpp"
+#endif
 #include "StartingGateMission.hpp"
 
-Robot::Robot()
+ Robot::Robot():logger("/tmp/rpi_log/rpi_log.log", Logger::DEBUG)
 {
+	logger.write("Initializing robot", Logger::MESSAGE);
 	period = 10;
+	logger.write("Initialized Robot.period to " + std::to_string(period),
+		     Logger::MESSAGE);
 	bat_v_threshold = 128;
+	logger.write("Initialized Robot.bat_v_threshold to " +
+		     std::to_string(bat_v_threshold), Logger::MESSAGE);
+#ifdef RPI_COMPILE
+	logger.write("Starting serial driver", Logger::MESSAGE);
 	serial.open_serial();
 	serial.start();
+	logger.write("Finished starting serial driver", Logger::MESSAGE);
+#endif
+#ifdef RPI_COMPILE
+	logger.write("Initializing forward camera as RPIVideoDevice",
+		     Logger::MESSAGE);
+	forward_camera = new RPIVideoDevice();
+	logger.write("Finished initializing forward camera as RPIVideoDevice",
+		     Logger::MESSAGE);
+#else
+	logger.write("Initializing forward camera as USBVideoDevice(1)",
+		     Logger::MESSAGE);
+	forward_camera = new USBVideoDevice(1);
+	logger.
+	    write("Finished initializing forward camera as USBVideoDevice(1)",
+		  Logger::MESSAGE);
+#endif
+	logger.write("Initializing downward camera as USBVideoDevice(0)",
+		     Logger::MESSAGE);
+	downward_camera = new USBVideoDevice(0);
+	logger.
+	    write("Finished initializing downward camera as USBVideoDevice(0)",
+		  Logger::MESSAGE);
+	logger.write("Starting forward camera", Logger::MESSAGE);
+	forward_camera->start();
+	logger.write("Finished starting forward camera", Logger::MESSAGE);
+	logger.write("Starting downward camera", Logger::MESSAGE);
+	downward_camera->start();
+	logger.write("Finished starting downward camera", Logger::MESSAGE);
+	logger.write("Finished initializing robot", Logger::MESSAGE);
+}
+
+Robot::~Robot()
+{
+	delete forward_camera;
+	delete downward_camera;
 }
 
 void Robot::set_period(int new_period)
 {
 	period = new_period;
+	logger.write("Robot.period changed to" + std::to_string(period),
+		     Logger::MESSAGE);
 }
 
 void Robot::autonomous_mode()
 {
+	logger.write("Running autonomous_init()", Logger::MESSAGE);
 	autonomous_init();
+	logger.write("Running autonomous_periodic()", Logger::MESSAGE);
 	while (true) {
 		autonomous_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
@@ -64,7 +116,9 @@ void Robot::autonomous_periodic()
 
 void Robot::teleop_mode()
 {
+	logger.write("Running teleop_init()", Logger::MESSAGE);
 	teleop_init();
+	logger.write("Running teleop_periodic()", Logger::MESSAGE);
 	while (true) {
 		teleop_periodic();
 		std::this_thread::sleep_for(std::chrono::milliseconds(period));
@@ -76,7 +130,7 @@ void Robot::teleop_init()
 	int_base = "dec";
 	std::cout << "Cubeception Helm" << std::endl;
 	std::cout << "Type \"help\" for help with commands" << std::
-		endl << std::endl;
+	    endl << std::endl;
 }
 
 void Robot::teleop_periodic()
@@ -87,6 +141,7 @@ void Robot::teleop_periodic()
 	std::cout << "cubeception> ";
 	std::string input;
 	std::getline(std::cin, input);
+	logger.write("Interpreter input: " + input, Logger::VERBOSE);
 	if (input.find(" ") == std::string::npos) {
 		if (input == "mag_x")
 			std::cout << "mag_x = " << serial.get_rx_packet()->
@@ -105,7 +160,7 @@ void Robot::teleop_periodic()
 			    get_health() << std::endl;
 		else if (input == "bat_v")
 			std::cout << "bat_v = " << (uint16_t) serial.
-			    get_rx_packet()->get_bat_v() << std::endl;
+				get_rx_packet()->get_bat_v() << std::endl;
 		else if (input == "reset") {
 			std::bitset<16> mode;
 			mode[15] = 1;
@@ -178,48 +233,44 @@ void Robot::teleop_periodic()
 			    << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "mag_x  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get magnetometer x-axis value" << std::
-			    endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get magnetometer x-axis value" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "mag_y  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get magnetometer y-axis value" << std::
-			    endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get magnetometer y-axis value" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "mag_z  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get magnetometer z-axis value" << std::
-			    endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get magnetometer z-axis value" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "pos_z  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get position along z-axis" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get position along z-axis" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "health  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get arduino health metric" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get arduino health metric" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "bat_v  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "get battery voltage" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "get battery voltage" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "dec  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "set integer base to decimal" << std::
-			    endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "set integer base to decimal" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "hex  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "set integer base to hex" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "set integer base to hex" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "oct  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "set integer base to octal" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "set integer base to octal" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "help  " << std::left << std::
-			    setw(8) << "        " << std::
-			    setw(0) << "show this help" << std::endl;
+			    setw(8) << "        " << std::setw(0)
+			    << "show this help" << std::endl;
 		} else
 			std::cout << input << ": command not found" << std::
 			    endl;
@@ -246,9 +297,8 @@ void Robot::teleop_periodic()
 			std::cout << "Set rot_z = " << value << std::endl;
 		} else if (key == "torpedo_ctl") {
 			serial.get_tx_packet()->set_torpedo_ctl(std::bitset <
-								8 >
-								((uint8_t)
-								 value));
+								8 > ((uint8_t)
+								     value));
 			std::cout << "Set torpedo_ctl = " << value << std::endl;
 		} else if (key == "servo_ctl") {
 			serial.get_tx_packet()->set_servo_ctl(std::bitset < 8 >
@@ -264,11 +314,26 @@ void Robot::teleop_periodic()
 							 ((uint16_t) value));
 			std::cout << "Set mode = " << value << std::endl;
 		} else if (key == "sleep") {
-			std::cout << "Sleeping for " << value << " ms" << std::
-			    endl;
-			std::this_thread::sleep_for(std::chrono::
-						    milliseconds(value));
+			std::cout << "Sleeping for " << value << " ms" <<
+			    std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds
+						    (value));
 		} else
 			std::cout << key << ": command not found" << std::endl;
 	}
+}
+
+BaseVideoDevice *Robot::get_forward_camera()
+{
+	return forward_camera;
+}
+
+BaseVideoDevice *Robot::get_downward_camera()
+{
+	return downward_camera;
+}
+
+Logger *Robot::get_logger()
+{
+	return &logger;
 }

@@ -27,8 +27,9 @@
 class BaseVideoDevice {
  public:
 	BaseVideoDevice();
+	virtual ~ BaseVideoDevice();
 	virtual void start() = 0;
-	cv::Mat get_image();
+	 cv::Mat get_image();
 	double pixels_to_angle(double pixels);
  protected:
 	 virtual void init_camera() = 0;

@@ -19,6 +19,7 @@
    <http://www.gnu.org/licenses/>. */
 
 #include <stdlib.h>
+#include <iostream>
 #include "CliOptions.hpp"
 #include "Robot.hpp"
 
