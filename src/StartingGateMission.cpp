@@ -70,7 +70,9 @@ void StartingGateMission::run()
 		/*for (uint i = 0; i < centroids.size(); i++)
 		   cv::circle(image, centroids.at(i), 5,
 		   cv::Scalar(0, 0, 0)); */
-		find_angular_displacement(centroids);
+		double angular_displacement = find_angular_displacement(centroids, cv::Point2f((float)image.rows / 2.0, (float)image.cols / 2.0));
+		robot->get_serial()->get_tx_packet()->set_rot_z(angular_displacement);
+		robot->get_logger()->write("StartingGateMission angular displacement is " + std::to_string(angular_displacement) + " degrees", Logger::VERBOSE);
 	}
 }
 
@@ -141,12 +143,12 @@ std::vector < cv::Point2f > StartingGateMission::find_centroids(std::vector <
 }
 
 double StartingGateMission::find_angular_displacement(std::vector <
-						      cv::Point2f > centroids)
+						      cv::Point2f > centroids, cv::Point2f image_center)
 {
 	cv::Point2f centroids_average = cv::Point2f(0.0, 0.0);
 	for (uint i = 0; i < centroids.size(); i++)
 		centroids_average += centroids.at(i);
 	centroids_average.x /= centroids.size();
 	centroids_average.y /= centroids.size();
-	return 0.0;
+	return robot->get_forward_camera()->pixels_to_angle((image_center - centroids_average).x);
 }

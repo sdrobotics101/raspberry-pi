@@ -161,7 +161,7 @@ void Robot::teleop_periodic()
 		else if (input == "bat_v")
 			std::cout << "bat_v = " << (uint16_t) serial.
 				get_rx_packet()->get_bat_v() << std::endl;
-		else if (input == "reset") {
+		else if (input == "sreset") {
 			std::bitset<16> mode;
 			mode[15] = 1;
 			serial.get_tx_packet()->set_mode(mode);
@@ -336,4 +336,9 @@ BaseVideoDevice *Robot::get_downward_camera()
 Logger *Robot::get_logger()
 {
 	return &logger;
+}
+
+Serial *Robot::get_serial()
+{
+	return &serial;
 }
