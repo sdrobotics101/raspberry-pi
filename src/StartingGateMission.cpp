@@ -23,6 +23,7 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 #include "Robot.hpp"
+#include "Logger.hpp"
 #include "Contour.hpp"
 #include "Circle.hpp"
 #include "Rectangle.hpp"
@@ -37,6 +38,8 @@
 
 void StartingGateMission::run()
 {
+	robot->get_logger()->write("Running mission " + mission_name,
+				   Logger::MESSAGE);
 	//cv::Mat image = cv::imread("/tmp/starting_gate.png");
 	cv::Mat image;
 	while (true) {
@@ -50,17 +53,23 @@ void StartingGateMission::run()
 		ContourDetector detector(detector_params);
 		std::vector < Contour > contours = detector.detect(image);
 		if (contours.empty()) {
+			robot->get_logger()->write("No contours found",
+						   Logger::WARNING);
 			continue;
 		}
 		std::vector < Rectangle > filtered_rectangles =
 		    filter_rectangles(contours);
-		if (filtered_rectangles.empty())
+		if (filtered_rectangles.empty()) {
+			robot->get_logger()->
+			    write("No filtered rectangles found",
+				  Logger::WARNING);
 			continue;
+		}
 		std::vector < cv::Point2f > centroids =
 		    find_centroids(filtered_rectangles);
-		for (uint i = 0; i < centroids.size(); i++)
-			cv::circle(image, centroids.at(i), 5,
-				   cv::Scalar(0, 0, 0));
+		/*for (uint i = 0; i < centroids.size(); i++)
+		   cv::circle(image, centroids.at(i), 5,
+		   cv::Scalar(0, 0, 0)); */
 		find_angular_displacement(centroids);
 	}
 }
@@ -100,8 +109,8 @@ std::vector < Rectangle > StartingGateMission::filter_rectangles(std::vector <
 		    detected_enclosing_circles.at(i).get_area_ratio()
 		    && detected_bounding_rectangles.at(i).get_aspect_ratio() <
 		    0.2)
-			filtered_rectangles.
-			    push_back(detected_bounding_rectangles.at(i));
+			filtered_rectangles.push_back
+			    (detected_bounding_rectangles.at(i));
 	}
 	return filtered_rectangles;
 }
@@ -125,10 +134,9 @@ std::vector < cv::Point2f > StartingGateMission::find_centroids(std::vector <
 	cv::kmeans(data, K, best_labels, criteria, attempts, flags, centroids);
 	std::vector < cv::Point2f > centroids_vector;
 	for (int i = 0; i < centroids.rows; i++)
-		centroids_vector.
-		    push_back(cv::
-			      Point2f(centroids.at < float >(i, 0),
-				      centroids.at < float >(i, 1)));
+		centroids_vector.push_back(cv::Point2f
+					   (centroids.at < float >(i, 0),
+					    centroids.at < float >(i, 1)));
 	return centroids_vector;
 }
 

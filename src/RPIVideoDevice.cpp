@@ -43,8 +43,7 @@ void RPIVideoDevice::init_camera()
 {
 	camera.set(CV_CAP_PROP_FORMAT, CV_8UC3);
 	if (!camera.open()) {
-		std::
-		    cerr << "Unable to open Raspberry Pi camera device." <<
+		std::cerr << "Unable to open Raspberry Pi camera device." <<
 		    std::endl;
 		exit(EXIT_FAILURE);
 	}

@@ -34,9 +34,9 @@ class Logger {
 		VERBOSE,
 		DEBUG
 	};
-	 Logger(std::string filename, LogType input_min_log_type);
+	 Logger(std::string filename, Logger::LogType input_min_log_type);
 	~Logger();
-	void write(std::string log, LogType type);
+	void write(std::string log, Logger::LogType type);
  private:
 	 std::ofstream log_file;
 	LogType min_log_type;

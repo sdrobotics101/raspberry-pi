@@ -21,11 +21,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <time.h>
+#include <chrono>
 #include "Logger.hpp"
 
 Logger::Logger(std::string filename, Logger::LogType input_min_log_type)
 {
-	log_file.open(filename);
+	log_file.open(filename, std::ofstream::app);
 	min_log_type = input_min_log_type;
 }
 
@@ -36,6 +38,11 @@ Logger::~Logger()
 
 void Logger::write(std::string log, Logger::LogType type)
 {
-	if (type >= min_log_type)
-		log_file << log << std::endl;
+	if (type >= min_log_type) {
+		std::time_t current_time =
+		    std::chrono::system_clock::to_time_t(std::chrono::
+							 system_clock::now());
+		log_file << "[" << ctime(&current_time) << "]: " << log << std::
+		    endl;
+	}
 }
