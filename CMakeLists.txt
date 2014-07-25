@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(robosub_rpi)
 set(CMAKE_CXX_FLAGS "-pthread -std=c++11 ${CMAKE_CXX_FLAGS} -Wall -Og -g")
+option(RPI_COMPILE "Compile with Raspberry Pi settings" OFF)
+if (RPI_COMPILE)
+   add_definitions(-DRPI_COMPILE)
+endif(RPI_COMPILE)
 add_subdirectory(src)

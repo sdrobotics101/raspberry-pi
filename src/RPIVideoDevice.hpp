@@ -1,4 +1,4 @@
-/* BaseVideoDevice.hpp -- Header file for BaseVideoDevice class
+/* RPIVideoDevice.hpp -- Header file for RPIVideoDevice class
 
    Copyright (C) 2012, 2013, 2014 Tushar Pankaj
    
@@ -18,27 +18,23 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef BaseVideoDevice_hpp
-#define BaseVideoDevice_hpp
+#ifndef RPIVideoDevice_hpp
+#define RPIVideoDevice_hpp
 
 #include <thread>
 #include <opencv2/opencv.hpp>
+#include <raspicam/raspicam_cv.h>
+#include "BaseVideoDevice.hpp"
 
-class BaseVideoDevice {
+class RPIVideoDevice:public BaseVideoDevice {
  public:
-	BaseVideoDevice();
-	virtual ~ BaseVideoDevice();
-	virtual void start() = 0;
-	 cv::Mat get_image();
-	double pixels_to_angle(double pixels);
+	RPIVideoDevice();
+	virtual void start();
+	 virtual ~ RPIVideoDevice();
  protected:
-	 virtual void init_camera() = 0;
-	virtual void capture_from_camera() = 0;
-	 std::thread * capture_thread;
-	 cv::Mat image;
-	bool is_finished;
-	bool is_ready;
-	double focal_length;
+	 virtual void init_camera();
+	virtual void capture_from_camera();
+	 raspicam::RaspiCam_Cv camera;
 };
 
-#endif				// BaseVideoDevice_hpp
+#endif				// RPIVideoDevice_hpp

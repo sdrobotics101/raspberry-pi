@@ -23,13 +23,17 @@
 
 #include <string>
 #include "Serial.hpp"
+#include "BaseVideoDevice.hpp"
 
 class Robot {
  public:
 	Robot();
+	~Robot();
 	void set_period(int new_period);
 	void autonomous_mode();
 	void teleop_mode();
+	BaseVideoDevice *get_forward_camera();
+	BaseVideoDevice *get_downward_camera();
  private:
 	void autonomous_init();
 	void teleop_init();
@@ -39,6 +43,8 @@ class Robot {
 	int period;
 	 std::string int_base;
 	uint8_t bat_v_threshold;
+	BaseVideoDevice *forward_camera;
+	BaseVideoDevice *downward_camera;
 };
 
 #endif				// Robot_hpp

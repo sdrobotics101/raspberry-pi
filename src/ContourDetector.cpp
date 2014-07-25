@@ -48,8 +48,8 @@ ContourDetector::Params::Params()
 	filter_with_blur = true;
 }
 
-ContourDetector::ContourDetector(const ContourDetector::
-				 Params & parameters):params(parameters)
+ContourDetector::
+ContourDetector(const ContourDetector::Params & parameters):params(parameters)
 {
 }
 
@@ -105,7 +105,8 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 	} else
 		blur_out.copyTo(canny_out);
 	std::vector < std::vector < cv::Point > >all_contours_raw;
-	cv::findContours(canny_out, all_contours_raw, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+	cv::findContours(canny_out, all_contours_raw, CV_RETR_LIST,
+			 CV_CHAIN_APPROX_SIMPLE);
 	std::vector < Contour > all_contours;
 	for (uint i = 0; i < all_contours_raw.size(); i++)
 		all_contours.push_back(Contour(all_contours_raw.at(i)));
@@ -115,8 +116,8 @@ std::vector < Contour > ContourDetector::detect(cv::Mat image)
 			if (all_contours.at(i).get_area() > params.min_area
 			    && area_filtered_contours.at(i).get_area() <
 			    params.max_area)
-				area_filtered_contours.push_back(all_contours.
-								 at(i));
+				area_filtered_contours.
+				    push_back(all_contours.at(i));
 		}
 	} else
 		area_filtered_contours = all_contours;

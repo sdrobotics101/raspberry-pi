@@ -29,8 +29,8 @@ class USBVideoDevice:public BaseVideoDevice {
  public:
 	USBVideoDevice(int input_device_id);
 	virtual void start();
-	~USBVideoDevice();
- private:
+	 virtual ~ USBVideoDevice();
+ protected:
 	 virtual void init_camera();
 	virtual void capture_from_camera();
 	 cv::VideoCapture camera;

@@ -27,14 +27,12 @@ Rectangle::Rectangle(std::vector < cv::Point > points)
 {
 	rectangle = cv::minAreaRect(points);
 	angle = (double)rectangle.angle;
-	if (cos(angle * 180.0 / M_PI) < 0.2)
-	{
+	if (cos(angle * 180.0 / M_PI) < 0.2) {
 		std::swap(rectangle.size.width, rectangle.size.height);
 		angle -= 90.0;
 		rectangle.angle -= 90.0;
 	}
-	if (angle < -90.0)
-	{
+	if (angle < -90.0) {
 		angle += 180.0;
 		rectangle.angle += 180.0;
 	}
