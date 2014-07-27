@@ -61,16 +61,16 @@
 	logger.write("Initializing forward camera as USBVideoDevice(1)",
 		     Logger::MESSAGE);
 	forward_camera = new USBVideoDevice(1);
-	logger.
-	    write("Finished initializing forward camera as USBVideoDevice(1)",
-		  Logger::MESSAGE);
+	logger.write
+	    ("Finished initializing forward camera as USBVideoDevice(1)",
+	     Logger::MESSAGE);
 #endif
 	logger.write("Initializing downward camera as USBVideoDevice(0)",
 		     Logger::MESSAGE);
 	downward_camera = new USBVideoDevice(0);
-	logger.
-	    write("Finished initializing downward camera as USBVideoDevice(0)",
-		  Logger::MESSAGE);
+	logger.write
+	    ("Finished initializing downward camera as USBVideoDevice(0)",
+	     Logger::MESSAGE);
 	logger.write("Starting forward camera", Logger::MESSAGE);
 	forward_camera->start();
 	logger.write("Finished starting forward camera", Logger::MESSAGE);
@@ -129,48 +129,53 @@ void Robot::teleop_init()
 {
 	int_base = "dec";
 	std::cout << "Cubeception Helm" << std::endl;
-	std::cout << "Type \"help\" for help with commands" << std::
-	    endl << std::endl;
+	std::
+	    cout << "Type \"help\" for help with commands" << std::endl << std::
+	    endl;
 }
 
 void Robot::teleop_periodic()
 {
 	if (serial.get_rx_packet()->get_bat_v() < bat_v_threshold)
-		std::cout << std::
-		    endl << "WARNING: LOW BATTERY VOLTAGE" << std::endl;
+		std::
+		    cout << std::endl << "WARNING: LOW BATTERY VOLTAGE" << std::
+		    endl;
 	std::cout << "cubeception> ";
 	std::string input;
 	std::getline(std::cin, input);
 	logger.write("Interpreter input: " + input, Logger::VERBOSE);
 	if (input.find(" ") == std::string::npos) {
 		if (input == "mag_x")
-			std::cout << "mag_x = " << serial.get_rx_packet()->
-			    get_mag_x() << std::endl;
+			std::cout << "mag_x = " << serial.
+			    get_rx_packet()->get_mag_x() << std::endl;
 		else if (input == "mag_y")
-			std::cout << "mag_y = " << serial.get_rx_packet()->
-			    get_mag_y() << std::endl;
+			std::cout << "mag_y = " << serial.
+			    get_rx_packet()->get_mag_y() << std::endl;
 		else if (input == "mag_z")
-			std::cout << "mag_z = " << serial.get_rx_packet()->
-			    get_mag_z() << std::endl;
+			std::cout << "mag_z = " << serial.
+			    get_rx_packet()->get_mag_z() << std::endl;
 		else if (input == "pos_z")
-			std::cout << "pos_z = " << serial.get_rx_packet()->
-			    get_pos_z() << std::endl;
+			std::cout << "pos_z = " << serial.
+			    get_rx_packet()->get_pos_z() << std::endl;
 		else if (input == "health")
-			std::cout << "health = " << serial.get_rx_packet()->
-			    get_health() << std::endl;
+			std::cout << "health = " << serial.
+			    get_rx_packet()->get_health() << std::endl;
 		else if (input == "bat_v")
-			std::cout << "bat_v = " << (uint16_t) serial.
-				get_rx_packet()->get_bat_v() << std::endl;
+			std::
+			    cout << "bat_v = " << (uint16_t)
+			    serial.get_rx_packet()->get_bat_v() << std::endl;
 		else if (input == "sreset") {
-			std::bitset<16> mode;
+			std::bitset < 16 > mode;
 			mode[15] = 1;
 			serial.get_tx_packet()->set_mode(mode);
-			std::cout << "Set mode = " << serial.get_tx_packet()->get_mode().to_ulong() << std::endl;
+			std::cout << "Set mode = " << serial.get_tx_packet()->
+			    get_mode().to_ulong() << std::endl;
 		} else if (input == "kill") {
-			std::bitset<16> mode;
+			std::bitset < 16 > mode;
 			mode[14] = 1;
 			serial.get_tx_packet()->set_mode(mode);
-			std::cout << "Set mode = " << serial.get_tx_packet()->get_mode().to_ulong() << std::endl;
+			std::cout << "Set mode = " << serial.get_tx_packet()->
+			    get_mode().to_ulong() << std::endl;
 		} else if (input == "dec") {
 			std::cin >> std::dec;
 			std::cout << std::dec;
@@ -187,101 +192,97 @@ void Robot::teleop_periodic()
 			int_base = "oct";
 			std::cout << "Set base to octal" << std::endl;
 		} else if (input == "help") {
-			std::cout << "Available commands:" << std::endl << std::
-			    endl;
-			std::cout << std::right << std::
-			    setw(14) << "vel_x  " << std::left << std::
-			    setw(8) << "INT8" << std::
-			    setw(0) << "set linear velocity along x-axis" <<
-			    std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "vel_y  " << std::left << std::
-			    setw(8) << "INT8" << std::
-			    setw(0) << "set linear velocity along y-axis" <<
-			    std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "vel_z  " << std::left << std::
-			    setw(8) << "INT8" << std::
-			    setw(0) << "set linear velocity along z-axis" <<
-			    std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "rot_z  " << std::left << std::
-			    setw(8) << "INT8" << std::
-			    setw(0) <<
+			std::cout << "Available commands:" << std::
+			    endl << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "vel_x  " << std::
+			    left << std::setw(8) << "INT8" << std::setw(0) <<
+			    "set linear velocity along x-axis" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "vel_y  " << std::
+			    left << std::setw(8) << "INT8" << std::setw(0) <<
+			    "set linear velocity along y-axis" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "vel_z  " << std::
+			    left << std::setw(8) << "INT8" << std::setw(0) <<
+			    "set linear velocity along z-axis" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "rot_z  " << std::
+			    left << std::setw(8) << "INT8" << std::setw(0) <<
 			    "set relative angular position about z-axis" <<
 			    std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "torpedo_ctl  " << std::left << std::
-			    setw(8) << "UINT8" << std::
-			    setw(0) << "set torpedo control byte" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "servo_ctl  " << std::left << std::
-			    setw(8) << "UINT8" << std::
-			    setw(0) << "set servo control byte" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "led_ctl  " << std::left << std::
-			    setw(8) << "UINT8" << std::
-			    setw(0) << "set led control byte" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "mode  " << std::left << std::
-			    setw(8) << "UINT16" << std::
-			    setw(0) << "set mode bytes" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "sleep  " << std::left << std::
-			    setw(8) << "UINT32" << std::
-			    setw(0) << "sleep for given number of milliseconds"
-			    << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "mag_x  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "torpedo_ctl  " << std::
+			    left << std::setw(8) << "UINT8" << std::setw(0) <<
+			    "set torpedo control byte" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "servo_ctl  " << std::
+			    left << std::setw(8) << "UINT8" << std::setw(0) <<
+			    "set servo control byte" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "led_ctl  " << std::
+			    left << std::setw(8) << "UINT8" << std::setw(0) <<
+			    "set led control byte" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "mode  " << std::
+			    left << std::setw(8) << "UINT16" << std::setw(0) <<
+			    "set mode bytes" << std::endl;
+			std::cout << std::
+			    right << std::setw(14) << "sleep  " << std::
+			    left << std::setw(8) << "UINT32" << std::setw(0) <<
+			    "sleep for given number of milliseconds" << std::
+			    endl;
+			std::cout << std::
+			    right << std::setw(14) << "mag_x  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get magnetometer x-axis value" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "mag_y  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "mag_y  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get magnetometer y-axis value" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "mag_z  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "mag_z  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get magnetometer z-axis value" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "pos_z  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "pos_z  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get position along z-axis" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "health  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "health  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get arduino health metric" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "bat_v  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "bat_v  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "get battery voltage" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "kill  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "kill  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "kill all motors" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "sreset  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "sreset  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "soft reset arduino control loops" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "dec  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "dec  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "set integer base to decimal" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "hex  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "hex  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "set integer base to hex" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "oct  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "oct  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "set integer base to octal" << std::endl;
-			std::cout << std::right << std::
-			    setw(14) << "help  " << std::left << std::
-			    setw(8) << "        " << std::setw(0)
+			std::cout << std::
+			    right << std::setw(14) << "help  " << std::
+			    left << std::setw(8) << "        " << std::setw(0)
 			    << "show this help" << std::endl;
 		} else
-			std::cout << input << ": command not found" << std::
-			    endl;
+			std::
+			    cout << input << ": command not found" << std::endl;
 	} else {
 		std::string key;
 		int value;

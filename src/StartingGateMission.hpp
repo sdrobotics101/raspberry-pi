@@ -43,7 +43,8 @@ class StartingGateMission:public Mission {
 						     detected_contours);
 	 std::vector < cv::Point2f > find_centroids(std::vector < Rectangle >
 						    rectangles);
-	double find_angular_displacement(std::vector < cv::Point2f > centroids, cv::Point2f image_center);
+	double find_angular_displacement(std::vector < cv::Point2f > centroids,
+					 cv::Point2f image_center);
 	 std::string mission_name;
 	Robot *robot;
 };
