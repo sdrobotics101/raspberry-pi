@@ -45,7 +45,7 @@ class Robot {
 	Serial serial;
 	int period;
 	 std::string int_base;
-	uint8_t bat_v_threshold;
+	double bat_v_threshold;
 	BaseVideoDevice *forward_camera;
 	BaseVideoDevice *downward_camera;
 	Logger logger;

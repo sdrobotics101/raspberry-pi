@@ -1,5 +1,6 @@
 find_package(OpenCV REQUIRED)
 if (RPI_COMPILE)
+   set(CMAKE_MODULE_PATH "/usr/lib/cmake")
    find_package(raspicam REQUIRED)
    set(ADDITIONAL_ROBOSUB_RPI_SOURCES RPIVideoDevice.cpp)
 else (RPI_COMPILE)

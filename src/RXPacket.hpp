@@ -61,6 +61,8 @@ class RXPacket {
 	 std::mutex rx_packet_mtx;
 	size_t rx_packet_size;
 	bool is_valid;
+	double bat_v_slope;
+	double bat_v_intercept;
 };
 
 #endif				// RXPacket_hpp

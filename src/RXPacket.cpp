@@ -36,6 +36,8 @@ RXPacket::RXPacket()
 	rx_packet.bat_v = 0;
 	rx_packet.checksum = compute_checksum();
 	is_valid = false;
+	bat_v_slope = 0.086202597521733371;
+	bat_v_intercept = 0.13758753478973684;
 }
 
 uint16_t RXPacket::get_header()
@@ -113,7 +115,7 @@ void RXPacket::set_bat_v(uint8_t bat_v)
 uint8_t RXPacket::get_bat_v()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return rx_packet.bat_v;
+	return bat_v_slope * rx_packet.bat_v + bat_v_intercept;
 }
 
 size_t RXPacket::size()
