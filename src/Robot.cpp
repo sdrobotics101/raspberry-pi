@@ -42,7 +42,7 @@
 	period = 10;
 	logger.write("Initialized Robot.period to " + std::to_string(period),
 		     Logger::MESSAGE);
-	bat_v_threshold = 8.0;
+	bat_v_threshold = 6.0;
 	logger.write("Initialized Robot.bat_v_threshold to " +
 		     std::to_string(bat_v_threshold), Logger::MESSAGE);
 #ifdef RPI_COMPILE

@@ -35,7 +35,7 @@ TXPacket::TXPacket()
 	tx_packet.torpedo_ctl = 0;
 	tx_packet.servo_ctl = 0;
 	tx_packet.led_ctl = 0;
-	tx_packet.mode = 0x1;
+	tx_packet.mode = 0xf1;
 	tx_packet.checksum = compute_checksum();
 	is_valid = false;
 }

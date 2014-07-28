@@ -112,10 +112,10 @@ void RXPacket::set_bat_v(uint8_t bat_v)
 	rx_packet.bat_v = bat_v;
 }
 
-uint8_t RXPacket::get_bat_v()
+double RXPacket::get_bat_v()
 {
 	std::lock_guard < std::mutex > rx_packet_lock(rx_packet_mtx);
-	return bat_v_slope * rx_packet.bat_v + bat_v_intercept;
+	return bat_v_slope * (double)rx_packet.bat_v + bat_v_intercept;
 }
 
 size_t RXPacket::size()
