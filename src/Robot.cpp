@@ -33,6 +33,7 @@
 #include "USBVideoDevice.hpp"
 #ifdef RPI_COMPILE
 #include "RPIVideoDevice.hpp"
+#include <wiringPi.h>
 #endif
 #include "StartingGateMission.hpp"
 
@@ -78,6 +79,11 @@
 	downward_camera->start();
 	logger.write("Finished starting downward camera", Logger::MESSAGE);
 	logger.write("Finished initializing robot", Logger::MESSAGE);
+	#ifdef RPI_COMPILE
+	wiringPiSetup();
+	pinMode(hreset_pin, OUTPUT);
+	digitalWrite(hreset_pin, OUTPUT);
+	#endif
 }
 
 Robot::~Robot()
@@ -170,6 +176,9 @@ void Robot::teleop_periodic()
 							 (0x80f1));
 			std::cout << "Set mode = " << serial.get_tx_packet()->
 			    get_mode().to_ulong() << std::endl;
+		} else if (input == "hreset") {
+			hreset_arduino();
+			std::cout << "Hard reset Arduino" << std::endl;
 		} else if (input == "kill") {
 			serial.get_tx_packet()->set_mode(std::bitset < 16 >
 							 (0x40f1));
@@ -412,4 +421,13 @@ Logger *Robot::get_logger()
 Serial *Robot::get_serial()
 {
 	return &serial;
+}
+
+void Robot::hreset_arduino()
+{
+	#ifdef RPI_COMPILE
+	digitalWrite(hreset_pin, LOW);
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	digitalWrite(hreset_pin, HIGH);
+	#endif
 }
