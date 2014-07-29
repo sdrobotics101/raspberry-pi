@@ -40,8 +40,9 @@ void Logger::write(std::string log, Logger::LogType type)
 {
 	if (type <= max_log_type) {
 		std::time_t current_time =
-		    std::chrono::system_clock::to_time_t(std::chrono::
-							 system_clock::now());
+		    std::chrono::system_clock::to_time_t(std::
+							 chrono::system_clock::
+							 now());
 		std::string time_str = ctime(&current_time);
 		time_str = time_str.substr(0, time_str.size() - 1);
 		log_file << "[" << time_str << "]: " << log << std::endl;

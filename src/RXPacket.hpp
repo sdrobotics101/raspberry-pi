@@ -39,7 +39,7 @@ class RXPacket {
 	void set_health(uint16_t health);
 	uint16_t get_health();
 	void set_bat_v(uint8_t bat_v);
-        double get_bat_v();
+	double get_bat_v();
 	uint16_t get_checksum();
 	size_t size();
 	bool valid();
