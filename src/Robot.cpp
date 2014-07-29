@@ -174,10 +174,10 @@ void Robot::teleop_periodic()
 		else if (input == "sreset") {
 			std::bitset < 16 > mode;
 			mode[15] = 1;
-			serial.get_tx_packet()->set_mode(std::bitset < 16 >
-							 (0x80f1));
-			std::cout << "Set mode = " << serial.
-			    get_tx_packet()->get_mode().to_ulong() << std::endl;
+			serial.get_tx_packet()->set_mode(std::bitset < 16 >(0x80f1));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			serial.get_tx_packet()->set_mode(std::bitset < 16 >(0x00f1));
+			std::cout << "Soft reset Arduino control loops" << std::endl;
 		} else if (input == "hreset") {
 			hreset_arduino();
 			std::cout << "Hard reset Arduino" << std::endl;
@@ -186,6 +186,23 @@ void Robot::teleop_periodic()
 							 (0x40f1));
 			std::cout << "Set mode = " << serial.
 			    get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "notest") {
+			serial.get_tx_packet()->set_mode(std::bitset<16>(0x00f1));
+			hreset_arduino();
+			std::cout << "Set mode = " << serial.
+				get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "motor") {
+			serial.get_tx_packet()->set_mode(std::bitset<16>(0x10f1));
+			std::cout << "Set mode = " << serial.
+				get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "imu") {
+			serial.get_tx_packet()->set_mode(std::bitset<16>(0x20f1));
+			std::cout << "Set mode = " << serial.
+				get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (input == "pressure") {
+			serial.get_tx_packet()->set_mode(std::bitset<16>(0x30f1));
+			std::cout << "Set mode = " << serial.
+				get_tx_packet()->get_mode().to_ulong() << std::endl;
 		} else if (input == "dec") {
 			std::cin >> std::dec;
 			std::cout << std::dec;
@@ -260,6 +277,21 @@ void Robot::teleop_periodic()
 			    setw(0) << "set stabilization loop control" << std::
 			    endl;
 			std::cout << std::right << std::
+			    setw(14) << "norm  " << std::left << std::
+			    setw(8) << "UINT8" << std::
+			    setw(0) << "set normal mode bit" << std::
+			    endl;
+			std::cout << std::right << std::
+			    setw(14) << "cal  " << std::left << std::
+			    setw(8) << "UINT8" << std::
+			    setw(0) << "set calibration mode bit" << std::
+			    endl;
+			std::cout << std::right << std::
+			    setw(14) << "loops  " << std::left << std::
+			    setw(8) << "UINT8" << std::
+			    setw(0) << "set loop state" << std::
+			    endl;
+			std::cout << std::right << std::
 			    setw(14) << "cs  " << std::left << std::
 			    setw(8) << "UINT8" << std::
 			    setw(0) << "set pid coefficients" << std::endl;
@@ -304,6 +336,22 @@ void Robot::teleop_periodic()
 			    setw(14) << "hreset  " << std::left << std::
 			    setw(8) << "        " << std::setw(0)
 			    << "hard reset arduino" << std::endl;
+			std::cout << std::right << std::
+			    setw(14) << "notest  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "leave testing mode" << std::endl;
+			std::cout << std::right << std::
+			    setw(14) << "motor  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "run motor test" << std::endl;
+			std::cout << std::right << std::
+			    setw(14) << "pressure  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "run pressure sensor test" << std::endl;
+			std::cout << std::right << std::
+			    setw(14) << "imu  " << std::left << std::
+			    setw(8) << "        " << std::setw(0)
+			    << "run imu test" << std::endl;
 			std::cout << std::right << std::
 			    setw(14) << "dec  " << std::left << std::
 			    setw(8) << "        " << std::setw(0)
@@ -405,6 +453,43 @@ void Robot::teleop_periodic()
 			serial.get_tx_packet()->set_mode(mode);
 			std::cout << "Set mode = " << serial.
 			    get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (key == "norm") {
+			std::bitset < 8 > norm_command((uint8_t) value);
+			std::bitset < 16 > mode =
+			    serial.get_tx_packet()->get_mode();
+			mode[2] = norm_command[0];
+			serial.get_tx_packet()->set_mode(mode);
+			std::cout << "Set mode = " << serial.
+			    get_tx_packet()->get_mode().to_ulong() << std::endl;
+		} else if (key == "loops") {
+			std::bitset < 8 > loops_command((uint8_t) value);
+			std::bitset < 16 > mode =
+				serial.get_tx_packet()->get_mode();
+			if (loops_command[0] == 0)
+			{
+				serial.get_tx_packet()->set_mode(std::bitset<16>(0x00f1));
+				std::cout << "Set mode = " << serial.
+					get_tx_packet()->get_mode().to_ulong() << std::endl;
+			}
+			else
+			{
+				mode[7] = 0;
+				mode[6] = 0;
+				mode[5] = 0;
+				mode[4] = 0;
+				mode[2] = 1;
+				serial.get_tx_packet()->set_mode(mode);
+				std::cout << "Set mode = " << serial.
+					get_tx_packet()->get_mode().to_ulong() << std::endl;
+			}
+		} else if (key == "cal") {
+			std::bitset < 8 > cal_command((uint8_t) value);
+			std::bitset < 16 > mode =
+				serial.get_tx_packet()->get_mode();
+			mode[3] = cal_command[0];
+			serial.get_tx_packet()->set_mode(mode);
+			std::cout << "Set mode = " << serial.
+				get_tx_packet()->get_mode().to_ulong() << std::endl;
 		} else if (key == "sleep") {
 			std::cout << "Sleeping for " << value << " ms" <<
 			    std::endl;
