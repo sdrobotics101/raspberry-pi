@@ -60,9 +60,9 @@ void StartingGateMission::run()
 		std::vector < Rectangle > filtered_rectangles =
 		    filter_rectangles(contours);
 		if (filtered_rectangles.empty()) {
-			robot->
-			    get_logger()->write("No filtered rectangles found",
-						Logger::WARNING);
+			robot->get_logger()->
+			    write("No filtered rectangles found",
+				  Logger::WARNING);
 			continue;
 		}
 		std::vector < cv::Point2f > centroids =
@@ -76,12 +76,13 @@ void StartingGateMission::run()
 							  2.0,
 							  (float)image.cols /
 							  2.0));
-		robot->get_serial()->get_tx_packet()->
-		    set_rot_z(angular_displacement);
-		robot->get_logger()->
-		    write("StartingGateMission angular displacement is " +
-			  std::to_string(angular_displacement) + " degrees",
-			  Logger::VERBOSE);
+		robot->get_serial()->
+		    get_tx_packet()->set_rot_z(angular_displacement);
+		robot->
+		    get_logger()->write
+		    ("StartingGateMission angular displacement is " +
+		     std::to_string(angular_displacement) + " degrees",
+		     Logger::VERBOSE);
 	}
 }
 
