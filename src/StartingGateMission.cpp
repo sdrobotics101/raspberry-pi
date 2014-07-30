@@ -34,56 +34,50 @@
  StartingGateMission::StartingGateMission(Robot * robot_ptr):Mission(robot_ptr)
 {
 	mission_name = "Starting Gate Mission";
+	gate_detected = false;
 }
 
 void StartingGateMission::run()
 {
-	robot->get_logger()->write("Running mission " + mission_name,
-				   Logger::MESSAGE);
-	//cv::Mat image = cv::imread("/tmp/starting_gate.png");
-	cv::Mat image;
-	while (true) {
-		image = robot->get_forward_camera()->get_image();
-		ContourDetector::Params detector_params;
-		detector_params.filter_by_hue = true;
-		detector_params.min_hue = 100;
-		detector_params.max_hue = 150;
-		detector_params.max_canny = 50;
-		detector_params.filter_with_blur = false;
-		ContourDetector detector(detector_params);
-		std::vector < Contour > contours = detector.detect(image);
-		if (contours.empty()) {
-			robot->get_logger()->write("No contours found",
-						   Logger::WARNING);
-			continue;
-		}
-		std::vector < Rectangle > filtered_rectangles =
-		    filter_rectangles(contours);
-		if (filtered_rectangles.empty()) {
-			robot->get_logger()->
-			    write("No filtered rectangles found",
-				  Logger::WARNING);
-			continue;
-		}
-		std::vector < cv::Point2f > centroids =
-		    find_centroids(filtered_rectangles);
-		/*for (uint i = 0; i < centroids.size(); i++)
-		   cv::circle(image, centroids.at(i), 5,
-		   cv::Scalar(0, 0, 0)); */
-		double angular_displacement =
-		    find_angular_displacement(centroids,
-					      cv::Point2f((float)image.rows /
-							  2.0,
-							  (float)image.cols /
-							  2.0));
-		robot->get_serial()->
-		    get_tx_packet()->set_rot_z(angular_displacement);
-		robot->
-		    get_logger()->write
-		    ("StartingGateMission angular displacement is " +
-		     std::to_string(angular_displacement) + " degrees",
-		     Logger::VERBOSE);
+	robot->get_logger()->write("Running mission " + mission_name, Logger::MESSAGE);
+	robot->get_serial()->get_tx_packet()->set_vel_x(64);
+	while (!gate_detected)
+		detect_gate();
+}
+
+void StartingGateMission::detect_gate()
+{
+	cv::Mat image = robot->get_forward_camera()->get_image();
+	ContourDetector::Params detector_params;
+	detector_params.filter_by_hue = true;
+	detector_params.min_hue = 100;
+	detector_params.max_hue = 150;
+	detector_params.max_canny = 50;
+	detector_params.filter_with_blur = false;
+	ContourDetector detector(detector_params);
+	std::vector < Contour > contours = detector.detect(image);
+	if (contours.empty()) {
+		robot->get_logger()->write("No contours found",
+					   Logger::WARNING);
+		gate_detected = false;
+		return;
 	}
+	std::vector < Rectangle > filtered_rectangles =
+		filter_rectangles(contours);
+	if (filtered_rectangles.empty()) {
+		robot->get_logger()->
+			write("No filtered rectangles found",
+			      Logger::WARNING);
+		gate_detected = false;
+		return;
+	}
+	std::vector < cv::Point2f > centroids =
+		find_centroids(filtered_rectangles);
+	cv::Point2f image_center = cv::Point2f((float)image.rows / 2.0, (float)image.cols / 2.0);
+	angular_displacement = find_angular_displacement(centroids, image_center);
+	robot->get_logger()->write("StartingGateMission angular displacement is " + std::to_string(angular_displacement) + " degrees", Logger::VERBOSE);
+	depth_displacement = find_depth_displacement(centroids, image_center);
+	gate_detected = true;
 }
 
 std::vector < Circle > StartingGateMission::contours_to_circles(std::vector <
@@ -163,4 +157,14 @@ double StartingGateMission::find_angular_displacement(std::vector <
 	centroids_average.y /= centroids.size();
 	return robot->get_forward_camera()->pixels_to_angle((centroids_average -
 							     image_center).x);
+}
+
+double StartingGateMission::find_depth_displacement(std::vector<cv::Point2f> centroids, cv::Point2f image_center)
+{
+	cv::Point2f centroids_average = cv::Point2f(0.0, 0.0);
+	for (uint i = 0; i < centroids.size(); i++)
+		centroids_average += centroids.at(i);
+	centroids_average.x /= centroids.size();
+	centroids_average.y /= centroids.size();
+	return (centroids_average - image_center).y;
 }
