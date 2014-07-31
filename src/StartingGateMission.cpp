@@ -21,6 +21,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include <opencv2/opencv.hpp>
 #include "Robot.hpp"
 #include "Logger.hpp"
@@ -28,6 +30,7 @@
 #include "Circle.hpp"
 #include "Rectangle.hpp"
 #include "ContourDetector.hpp"
+#include "DepthController.hpp"
 #include "Mission.hpp"
 #include "StartingGateMission.hpp"
 
@@ -40,9 +43,53 @@
 void StartingGateMission::run()
 {
 	robot->get_logger()->write("Running mission " + mission_name, Logger::MESSAGE);
-	robot->get_serial()->get_tx_packet()->set_vel_x(64);
-	while (!gate_detected)
+	cv::Point2f mag_original = sample_magnetometer();
+	DepthController depth_controller = DepthController(robot, 1.5, 0.1, 0.0);
+	depth_controller.set_depth(60);
+	robot->get_serial()->get_tx_packet()->set_vel_x(32);
+	while (true)
+	{
+		cv::Point2f mag_current = sample_magnetometer();
+		double angle = get_angle(mag_original, mag_current);
+		robot->get_serial()->get_tx_packet()->set_rot_z((int8_t)(angle * 127.0 / 180.0));
+	}
+	/*while (!gate_detected)
 		detect_gate();
+	int no_detect_count = 0;
+	while (no_detect_count < 30)
+	{
+		detect_gate();
+		if (gate_detected)
+		{
+			robot->get_serial()->get_tx_packet()->set_rot_z((int8_t)(angular_displacement * 127.0 / 180.0));
+			no_detect_count = 0;
+		}
+		else
+			no_detect_count++;
+	}
+	while (true)
+	{
+	}*/
+}
+
+double StartingGateMission::get_angle(cv::Point2f v1, cv::Point2f v2)
+{
+	//return acos((v1.x*v2.x+v1.y*v2.y)/(sqrt(pow(v1.x,2)+pow(v1.y,2))*sqrt(pow(v2.x,2)+pow(v2.y,2)))) * 180.0 / M_PI;
+	return asin((v2.y-v1.y)/(v2.x-v1.y)) * 180.0 / M_PI;
+}
+
+cv::Point2f StartingGateMission::sample_magnetometer()
+{
+	cv::Point2f sample_avg(0.0, 0.0);
+	int sample_count = 16;
+	for (int i = 0; i < sample_count; i++)
+	{
+		sample_avg += cv::Point2f(robot->get_serial()->get_rx_packet()->get_mag_y(), robot->get_serial()->get_rx_packet()->get_mag_x());
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	sample_avg.x /= (float)sample_count;
+	sample_avg.y /= (float)sample_count;
+	return sample_avg;
 }
 
 void StartingGateMission::detect_gate()

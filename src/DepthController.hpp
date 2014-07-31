@@ -1,4 +1,4 @@
-/* Rectangle.hpp -- Header file for Rectangle class
+/* DepthController.hpp -- Header file for DepthController class
 
    Copyright (C) 2014 Tushar Pankaj
    
@@ -18,27 +18,30 @@
    along with San Diego Robotics 101 Robosub.  If not, see
    <http://www.gnu.org/licenses/>. */
 
-#ifndef Rectangle_hpp
-#define Rectangle_hpp
+#ifndef DepthController_hpp
+#define DepthController_hpp
 
-#include <vector>
-#include <opencv2/opencv.hpp>
-#include "Contour.hpp"
+#include <stdint.h>
+#include <thread>
+#include "Robot.hpp"
 
-class Rectangle:public Contour {
+class DepthController {
  public:
-	Rectangle(std::vector < cv::Point > points);
-	cv::Point2f get_center();
-	double get_width();
-	double get_height();
-	double get_aspect_ratio();
-	double get_angle();
-	double get_area_ratio();
- protected:
-	 cv::RotatedRect rectangle;
-	double aspect_ratio;
-	double angle;
-	double area_ratio;
+	DepthController(Robot * robot_ptr, double p, double i, double d);
+	~DepthController();
+	void set_depth(double setpoint);
+ private:
+	void iterate();
+	void run();
+	Robot *robot;
+	std::thread * controller_thread;
+	double k_p;
+	double k_i;
+	double k_d;
+	double setpoint;
+	double previous_error;
+	double integral;
+	bool is_running;
 };
 
-#endif				// Rectangle_hpp
+#endif				// DepthController_hpp

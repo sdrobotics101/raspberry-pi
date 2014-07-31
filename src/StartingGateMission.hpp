@@ -35,6 +35,8 @@ class StartingGateMission:public Mission {
 	StartingGateMission(Robot * robot_ptr);
 	virtual void run();
  protected:
+	cv::Point2f sample_magnetometer();
+	double get_angle(cv::Point2f v1, cv::Point2f v2);
 	 void detect_gate();
 	 std::vector < Circle > contours_to_circles(std::vector < Contour >
 						    contours);

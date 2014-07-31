@@ -58,28 +58,28 @@
 #ifdef RPI_COMPILE
 	logger.write("Initializing forward camera as RPIVideoDevice",
 		     Logger::MESSAGE);
-	forward_camera = new RPIVideoDevice();
+	//forward_camera = new RPIVideoDevice();
 	logger.write("Finished initializing forward camera as RPIVideoDevice",
 		     Logger::MESSAGE);
 #else
 	logger.write("Initializing forward camera as USBVideoDevice(1)",
 		     Logger::MESSAGE);
-	forward_camera = new USBVideoDevice(1);
+	//forward_camera = new USBVideoDevice(1);
 	logger.write
 	    ("Finished initializing forward camera as USBVideoDevice(1)",
 	     Logger::MESSAGE);
 #endif
 	logger.write("Initializing downward camera as USBVideoDevice(0)",
 		     Logger::MESSAGE);
-	downward_camera = new USBVideoDevice(0);
+	//downward_camera = new USBVideoDevice(0);
 	logger.write
 	    ("Finished initializing downward camera as USBVideoDevice(0)",
 	     Logger::MESSAGE);
 	logger.write("Starting forward camera", Logger::MESSAGE);
-	forward_camera->start();
+	//forward_camera->start();
 	logger.write("Finished starting forward camera", Logger::MESSAGE);
 	logger.write("Starting downward camera", Logger::MESSAGE);
-	downward_camera->start();
+	//downward_camera->start();
 	logger.write("Finished starting downward camera", Logger::MESSAGE);
 	logger.write("Finished initializing robot", Logger::MESSAGE);
 #ifdef RPI_COMPILE
@@ -91,8 +91,8 @@
 
 Robot::~Robot()
 {
-	delete forward_camera;
-	delete downward_camera;
+	//delete forward_camera;
+	//delete downward_camera;
 }
 
 void Robot::set_period(int new_period)
